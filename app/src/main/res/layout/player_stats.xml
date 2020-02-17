@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/activity_main" android:layout_height="wrap_content" android:layout_width="wrap_content">
+
+    <TextView
+        android:id="@+id/txt_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="Player 1:"
+        app:layout_constraintBottom_toTopOf="@id/txt_playerName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_playerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tabbed_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="Name:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/txt_moves"
+        app:layout_constraintTop_toBottomOf="@+id/txt_player" />
+
+    <TextView
+        android:id="@+id/txt_moves"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tabbed_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="Moves:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/txt_thinkingTime"
+        app:layout_constraintTop_toBottomOf="@+id/txt_playerName" />
+
+    <TextView
+        android:id="@+id/txt_thinkingTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tabbed_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="Time:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/txt_timePerMove"
+        app:layout_constraintTop_toBottomOf="@+id/txt_moves" />
+
+    <TextView
+        android:id="@+id/txt_timePerMove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tabbed_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="Time per move:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_thinkingTime"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
