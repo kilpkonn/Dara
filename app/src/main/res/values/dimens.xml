@@ -2,4 +2,5 @@
 <resources>
     <dimen name="default_margin">16dp</dimen>
     <dimen name="tabbed_margin">32dp</dimen>
+    <dimen name="stats_line_margin">3dp</dimen>
 </resources>
