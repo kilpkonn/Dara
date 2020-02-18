@@ -18,9 +18,8 @@
         android:layout_marginStart="@dimen/small_margin"
         android:layout_marginEnd="@dimen/small_margin"
         app:layout_constraintDimensionRatio="5:6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
