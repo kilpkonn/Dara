@@ -321,10 +321,11 @@
 
     <Button
         android:id="@+id/btn_0A"
+        style="@style/game_board_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="0dp"
-        style="@style/game_board_button"
+        android:layout_marginTop="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/btn_0B"
         app:layout_constraintHorizontal_bias="0.5"
@@ -333,9 +334,10 @@
 
     <Button
         android:id="@+id/btn_0B"
+        style="@style/game_board_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        style="@style/game_board_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/btn_0C"
         app:layout_constraintHorizontal_bias="0.5"
@@ -344,9 +346,10 @@
 
     <Button
         android:id="@+id/btn_0C"
+        style="@style/game_board_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        style="@style/game_board_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/btn_0D"
         app:layout_constraintHorizontal_bias="0.5"
@@ -355,9 +358,10 @@
 
     <Button
         android:id="@+id/btn_0D"
+        style="@style/game_board_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        style="@style/game_board_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/btn_0E"
         app:layout_constraintHorizontal_bias="0.5"
@@ -366,10 +370,10 @@
 
     <Button
         android:id="@+id/btn_0E"
+        style="@style/game_board_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="0dp"
-        style="@style/game_board_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

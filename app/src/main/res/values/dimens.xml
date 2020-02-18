@@ -4,4 +4,5 @@
     <dimen name="tabbed_margin">32dp</dimen>
     <dimen name="stats_line_margin">0dp</dimen>
     <dimen name="small_margin">8dp</dimen>
+    <dimen name="button_margin">4dp</dimen>
 </resources>

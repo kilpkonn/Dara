@@ -22,6 +22,7 @@
 
     <style name="game_board_button">
         <item name="android:background">@drawable/button_gradient</item>
+        <item name="android:layout_margin">@dimen/button_margin</item>
     </style>
 
 </resources>
