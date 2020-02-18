@@ -25,4 +25,15 @@
         <item name="android:layout_margin">@dimen/button_margin</item>
     </style>
 
+    <style name="player_stats">
+        <item name="android:background">@drawable/stats_background_gradient</item>
+        <item name="android:padding">@dimen/small_margin</item>
+    </style>
+
+    <style name="player_stats_highlight">
+        <item name="android:background">@drawable/player_stats_highlight_gradient</item>
+        <item name="android:padding">@dimen/stats_line_margin</item>
+        <item name="android:layout_margin">@dimen/stats_line_margin</item>
+    </style>
+
 </resources>
