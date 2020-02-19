@@ -25,28 +25,27 @@
     <include
         android:id="@+id/player1"
         layout="@layout/player_select"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        app:layout_constraintBottom_toTopOf="@id/player2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_title" />
+        app:layout_constraintTop_toBottomOf="@id/txt_title"
+        app:layout_constraintBottom_toTopOf="@id/btn_start"
+        app:layout_constraintEnd_toStartOf="@id/player2"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <include
         android:id="@+id/player2"
         layout="@layout/player_select"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginTop="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        app:layout_constraintBottom_toTopOf="@id/btn_start"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player1" />
+        app:layout_constraintStart_toEndOf="@id/player1"
+        app:layout_constraintTop_toTopOf="@id/player1"
+        app:layout_constraintBottom_toBottomOf="@id/player1"/>
 
     <Button
         android:id="@+id/btn_start"
@@ -61,6 +60,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player2" />
+        app:layout_constraintTop_toBottomOf="@+id/player1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
