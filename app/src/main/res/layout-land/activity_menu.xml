@@ -7,15 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".MenuActivity">
 
-    <TextView
-        android:id="@+id/txt_title"
-        style="@style/app_title"
+    <include layout="@layout/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        android:text="@string/app_title"
         app:layout_constraintBottom_toTopOf="@+id/player1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,16 +44,13 @@
         app:layout_constraintTop_toTopOf="@id/player1"
         app:layout_constraintBottom_toBottomOf="@id/player1"/>
 
-    <Button
-        android:id="@+id/btn_start"
-        style="@style/start_button"
+    <include layout="@layout/start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginBottom="@dimen/default_margin"
-        android:text="@string/btn_start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
