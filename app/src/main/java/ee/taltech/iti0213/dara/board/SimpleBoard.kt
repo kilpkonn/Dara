@@ -1,32 +1,32 @@
 package ee.taltech.iti0213.dara.board
 
-class SimpleBoard<U : IPosition> : IBoard<Stone, U> {
+import ee.taltech.iti0213.dara.board.enums.GameState
 
-    private var matrix: Array<Array<Stone>>
-    private var isWhiteToMove: Boolean
-    private val height: Int
-    private val width: Int
+
+class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int) :
+    IBoard<Stone, U> {
+    private var matrix: Array<Array<Stone>> = Array(height) { Array(width) { Stone.EMPTY } }
+    private var isWhiteToMove: Boolean = true
+    private var gameState: GameState = GameState.SETUP
+    private var stonesPerPlayer: Int = 12
 
     companion object {
         fun Array<Array<Stone>>.copy() = Array(size) { get(it).clone() }
     }
 
-    constructor(height: Int, width: Int) {
-        this.matrix = Array(height) { Array(width) { Stone.EMPTY } }
-        this.isWhiteToMove = true
-        this.height = height
-        this.width = width
-    }
-
-
     override fun getBoardMatrix(): Array<Array<Stone>> {
         return matrix.copy()
     }
 
-    override fun makeMove(move: U): Boolean {
+    override fun putStone(move: U): Boolean {
         if (matrix[move.getY()][move.getX()] != Stone.EMPTY) return false
+        if (gotRow(move.getY(), move.getX())) return false
         matrix[move.getY()][move.getY()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
         isWhiteToMove = !isWhiteToMove
+        if (isWhiteToMove) {
+            stonesPerPlayer--
+            if (stonesPerPlayer <= 0) gameState = GameState.PLAYING
+        }
         return true
     }
 
@@ -36,5 +36,39 @@ class SimpleBoard<U : IPosition> : IBoard<Stone, U> {
 
     override fun getWidth(): Int {
         return width
+    }
+
+    override fun getGameState(): GameState {
+        return gameState
+    }
+
+    private fun evaluateWin() {
+        var whiteCount = 0
+        var blackCount = 0
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                when (matrix[y][x]) {
+                    Stone.BLACK -> blackCount++
+                    Stone.WHITE -> whiteCount++
+                }
+            }
+        }
+        gameState =
+            if (whiteCount < 3) GameState.BLACK_WON else if (blackCount < 3) GameState.WHITE_WON else gameState
+    }
+
+    private fun gotRow(y: Int, x: Int, stoneToPut: Stone? = null): Boolean {
+        var upward = true
+        var downward = true
+        var left = true
+        var right = true
+        val stone = stoneToPut ?: matrix[y][x]
+        for (i in 1 until 3) {
+            upward = if (y - i >= 0 && matrix[y - i][x] == stone) upward else false
+            downward = if (y + i < height && matrix[y + i][x] == stone) downward else false
+            left = if (x - i >= 0 && matrix[y][x - i] == stone) left else false
+            right = if (x + i < width && matrix[y][x + i] == stone) right else false
+        }
+        return upward || downward || left || right
     }
 }
