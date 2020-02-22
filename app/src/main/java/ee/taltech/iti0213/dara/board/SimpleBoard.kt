@@ -20,7 +20,7 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
 
     override fun putStone(to: U): Boolean {
         if (matrix[to.getY()][to.getX()] != Stone.EMPTY) return false
-        if (gotRow(to.getY(), to.getX())) return false
+        if (gotRow(to.getY(), to.getX(), if (isWhiteToMove) Stone.WHITE else Stone.BLACK)) return false
         matrix[to.getY()][to.getY()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
         isWhiteToMove = !isWhiteToMove
         if (isWhiteToMove) {
@@ -31,11 +31,18 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
     }
 
     override fun makeMove(from: U, to: U): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (matrix[from.getY()][from.getX()] != if (isWhiteToMove) Stone.WHITE else Stone.BLACK) return -1
+        if (matrix[to.getY()][to.getX()] != Stone.EMPTY) return -1
+        matrix[from.getY()][from.getX()] = Stone.EMPTY
+        matrix[to.getY()][to.getX()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
+        return if (gotRow(to.getY(), to.getX())) 1 else 0
     }
 
     override fun takeStone(from: U): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (matrix[from.getY()][from.getX()] == Stone.EMPTY) return false
+        if (matrix[from.getY()][from.getX()] == if (isWhiteToMove) Stone.WHITE else Stone.BLACK) return false
+        matrix[from.getY()][from.getX()] = Stone.EMPTY
+        return true
     }
 
     override fun getHeight(): Int {
