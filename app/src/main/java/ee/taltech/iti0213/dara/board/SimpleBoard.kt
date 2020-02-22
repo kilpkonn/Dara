@@ -18,16 +18,24 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
         return matrix.copy()
     }
 
-    override fun putStone(move: U): Boolean {
-        if (matrix[move.getY()][move.getX()] != Stone.EMPTY) return false
-        if (gotRow(move.getY(), move.getX())) return false
-        matrix[move.getY()][move.getY()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
+    override fun putStone(to: U): Boolean {
+        if (matrix[to.getY()][to.getX()] != Stone.EMPTY) return false
+        if (gotRow(to.getY(), to.getX())) return false
+        matrix[to.getY()][to.getY()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
         isWhiteToMove = !isWhiteToMove
         if (isWhiteToMove) {
             stonesPerPlayer--
             if (stonesPerPlayer <= 0) gameState = GameState.PLAYING
         }
         return true
+    }
+
+    override fun makeMove(from: U, to: U): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun takeStone(from: U): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getHeight(): Int {
