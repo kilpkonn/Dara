@@ -5,7 +5,7 @@ import ee.taltech.iti0213.dara.board.IMove
 import ee.taltech.iti0213.dara.board.IPosition
 import ee.taltech.iti0213.dara.board.IStone
 
-class SimpleStrategy<T: IStone, U: IPosition>: IStrategy<T, U> {
+class HumanStrategy<T: IStone, U: IPosition>: IStrategy<T, U> {
     override fun getPutMove(board: IBoard<T, U>): U {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -19,6 +19,6 @@ class SimpleStrategy<T: IStone, U: IPosition>: IStrategy<T, U> {
     }
 
     override fun getName(): String {
-        return "Simple AI"
+        return "Human"
     }
 }
