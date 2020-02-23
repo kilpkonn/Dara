@@ -30,12 +30,12 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
         return true
     }
 
-    override fun makeMove(from: U, to: U): Int {
-        if (matrix[from.getY()][from.getX()] != if (isWhiteToMove) Stone.WHITE else Stone.BLACK) return -1
-        if (matrix[to.getY()][to.getX()] != Stone.EMPTY) return -1
-        matrix[from.getY()][from.getX()] = Stone.EMPTY
-        matrix[to.getY()][to.getX()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
-        return if (gotRow(to.getY(), to.getX())) 1 else 0
+    override fun makeMove(move: Move<U>): Int {
+        if (matrix[move.from().getY()][move.from().getX()] != if (isWhiteToMove) Stone.WHITE else Stone.BLACK) return -1
+        if (matrix[move.to().getY()][move.to().getX()] != Stone.EMPTY) return -1
+        matrix[move.from().getY()][move.from().getX()] = Stone.EMPTY
+        matrix[move.to().getY()][move.to().getX()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
+        return if (gotRow(move.to().getY(), move.to().getX())) 1 else 0
     }
 
     override fun takeStone(from: U): Boolean {
