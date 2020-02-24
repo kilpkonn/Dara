@@ -4,6 +4,7 @@ import android.util.Log
 import ee.taltech.iti0213.dara.board.Position
 import ee.taltech.iti0213.dara.board.SimpleBoard
 import ee.taltech.iti0213.dara.board.Stone
+import ee.taltech.iti0213.dara.board.enums.GameState
 import ee.taltech.iti0213.dara.constants.C
 import ee.taltech.iti0213.dara.player.Player
 import ee.taltech.iti0213.dara.player.strategy.HumanStrategy
@@ -15,6 +16,11 @@ import kotlinx.coroutines.withContext
 import java.io.Serializable
 
 class GameSession(player1Strategy: String, player2Strategy: String) : Serializable {
+
+    companion object {
+        private val TAG = this::class.java.declaringClass!!.simpleName
+    }
+
     val playerWhite: Player<Stone, Position>
     val playerBlack: Player<Stone, Position>
     val board = SimpleBoard<Position>(C.BOARD_HEIGHT, C.BOARD_WIDTH)
@@ -32,15 +38,45 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
     }
 
     suspend fun playGame() {
-            while (true) {
-                val move =
-                    withContext(coroutineScope.coroutineContext + Dispatchers.Default) {
-                        if (isWhiteToMove) playerWhite.getPutMove(board)
-                        else playerBlack.getPutMove(board)
-                    }
-                if (board.putStone(move)) isWhiteToMove = !isWhiteToMove
-                Log.d("tag", "Stone to: ${move.getY()}, ${move.getX()}")
+        while (board.getGameState() == GameState.SETUP) {
+            val putMove =
+                withContext(coroutineScope.coroutineContext + Dispatchers.Default) {
+                    if (isWhiteToMove) playerWhite.getPutMove(board)
+                    else playerBlack.getPutMove(board)
+                }
+            if (board.putStone(putMove)) {
+                isWhiteToMove = !isWhiteToMove
+                Log.d(TAG, "Stone put to: ${putMove.getY()}, ${putMove.getX()}")
             }
+        }
+        Log.d(TAG, "All stones have been placed!")
+
+        while (board.getGameState() == GameState.PLAYING) {
+            Log.d(TAG, "Take stone! White to move: $isWhiteToMove")
+            val move =
+                withContext(coroutineScope.coroutineContext + Dispatchers.Default) {
+                    if (isWhiteToMove) playerWhite.getMove(board)
+                    else playerBlack.getMove(board)
+                }
+            val moveRes = board.makeMove(move)
+
+            if (moveRes >= 1) {
+                do {
+                    val takeMove =
+                        withContext(coroutineScope.coroutineContext + Dispatchers.Default) {
+                            if (isWhiteToMove) playerWhite.getTakeMove(board)
+                            else playerBlack.getTakeMove(board)
+                        }
+                    val takeRes = board.takeStone(takeMove)
+                    if (takeRes) {
+                        Log.d(TAG, "Stone taken from: ${takeMove.getY()}, ${takeMove.getX()}")
+                    }
+                } while (!takeRes)
+            }
+            if (moveRes >= 0) {
+                isWhiteToMove = !isWhiteToMove
+            }
+        }
     }
 
     private fun setupPlayer(strategyString: String, isWhite: Boolean): Player<Stone, Position> {

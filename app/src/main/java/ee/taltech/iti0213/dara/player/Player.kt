@@ -24,7 +24,7 @@ class Player<T: IStone, U:IPosition>(private val strategy: IStrategy<T, U>):
         return strategy.getMove(board)
     }
 
-    override suspend fun fetTakeMove(board: IBoard<T, U>): U {
+    override suspend fun getTakeMove(board: IBoard<T, U>): U {
         return strategy.getTakeMove(board)
     }
 

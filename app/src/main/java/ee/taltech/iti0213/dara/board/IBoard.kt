@@ -22,7 +22,7 @@ interface IBoard <T : IStone, U : IPosition>: Serializable {
      * @param move move with from and to locations
      * @return [Int] -1 if move was invalid, 1 if row of 3 was achieved, otherwise 0
      */
-    fun makeMove(move: Move<U>): Int
+    fun makeMove(move: IMove<U>): Int
 
     /**
      * Take enemies stone

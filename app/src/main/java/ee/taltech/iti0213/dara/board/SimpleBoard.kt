@@ -1,6 +1,7 @@
 package ee.taltech.iti0213.dara.board
 
 import ee.taltech.iti0213.dara.board.enums.GameState
+import ee.taltech.iti0213.dara.constants.C
 
 
 class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int) :
@@ -8,7 +9,7 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
     private var matrix: Array<Array<Stone>> = Array(height) { Array(width) { Stone.EMPTY } }
     private var isWhiteToMove: Boolean = true
     private var gameState: GameState = GameState.SETUP
-    private var stonesPerPlayer: Int = 12
+    private var stonesPerPlayer: Int = C.STONES_PER_PLAYER
 
     companion object {
         fun Array<Array<Stone>>.copy() = Array(size) { get(it).clone() }
@@ -30,7 +31,7 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
         return true
     }
 
-    override fun makeMove(move: Move<U>): Int {
+    override fun makeMove(move: IMove<U>): Int {
         if (matrix[move.from().getY()][move.from().getX()] != if (isWhiteToMove) Stone.WHITE else Stone.BLACK) return -1
         if (matrix[move.to().getY()][move.to().getX()] != Stone.EMPTY) return -1
         matrix[move.from().getY()][move.from().getX()] = Stone.EMPTY

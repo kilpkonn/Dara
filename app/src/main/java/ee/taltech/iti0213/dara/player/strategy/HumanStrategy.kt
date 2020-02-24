@@ -1,12 +1,9 @@
 package ee.taltech.iti0213.dara.player.strategy
 
-import ee.taltech.iti0213.dara.board.IBoard
-import ee.taltech.iti0213.dara.board.IMove
-import ee.taltech.iti0213.dara.board.IPosition
-import ee.taltech.iti0213.dara.board.IStone
+import ee.taltech.iti0213.dara.board.*
 import kotlinx.coroutines.delay
 
-class HumanStrategy<T: IStone, U: IPosition>: IStrategy<T, U> {
+class HumanStrategy<T : IStone, U : IPosition> : IStrategy<T, U> {
     private var clickedLocation: U? = null
     override fun onUserClickedLocation(location: U) {
         clickedLocation = location
@@ -19,7 +16,15 @@ class HumanStrategy<T: IStone, U: IPosition>: IStrategy<T, U> {
     }
 
     override suspend fun getMove(board: IBoard<T, U>): IMove<U> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        clickedLocation = null
+        while (clickedLocation == null) delay(10)
+
+        val fromLocation = clickedLocation
+        clickedLocation = null
+        while (clickedLocation == null) delay(10)
+
+        if (clickedLocation == fromLocation) return getMove(board) // Deselect current
+        return Move(fromLocation as U, clickedLocation as U)
     }
 
     override suspend fun getTakeMove(board: IBoard<T, U>): U {
