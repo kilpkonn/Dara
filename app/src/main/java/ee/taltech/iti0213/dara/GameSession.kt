@@ -11,7 +11,7 @@ import ee.taltech.iti0213.dara.player.strategy.IStrategy
 import ee.taltech.iti0213.dara.player.strategy.RandomStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import java.io.Serializable
 
 class GameSession(player1Strategy: String, player2Strategy: String) : Serializable {
@@ -33,11 +33,13 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
 
     suspend fun playGame() {
             while (true) {
-                val move = coroutineScope.async(Dispatchers.Default) {
-                    if (isWhiteToMove) playerWhite.getPutMove(board) else playerBlack.getPutMove(board)
-                }.await()
-                board.putStone(move)
-                Log.d("tag", "Stone to $move")
+                val move =
+                    withContext(coroutineScope.coroutineContext + Dispatchers.Default) {
+                        if (isWhiteToMove) playerWhite.getPutMove(board)
+                        else playerBlack.getPutMove(board)
+                    }
+                if (board.putStone(move)) isWhiteToMove = !isWhiteToMove
+                Log.d("tag", "Stone to: ${move.getY()}, ${move.getX()}")
             }
     }
 
