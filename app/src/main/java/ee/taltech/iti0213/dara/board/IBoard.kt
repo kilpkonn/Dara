@@ -1,8 +1,9 @@
 package ee.taltech.iti0213.dara.board
 
 import ee.taltech.iti0213.dara.board.enums.GameState
+import java.io.Serializable
 
-interface IBoard <T : IStone, U : IPosition>{
+interface IBoard <T : IStone, U : IPosition>: Serializable {
 
     /**
      * Get the matrix of the board
