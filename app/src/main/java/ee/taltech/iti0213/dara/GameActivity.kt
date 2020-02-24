@@ -1,5 +1,6 @@
 package ee.taltech.iti0213.dara
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -8,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import ee.taltech.iti0213.dara.board.Position
-import ee.taltech.iti0213.dara.board.SimpleBoard
+import ee.taltech.iti0213.dara.board.*
 import ee.taltech.iti0213.dara.constants.C
+import ee.taltech.iti0213.dara.player.Player
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,8 +32,8 @@ class GameActivity : AppCompatActivity() {
         gameSession = savedInstanceState?.getSerializable(C.GAME_SESSION_KEY) as GameSession?
             ?: GameSession(player1Strategy, player2Strategy)
 
-        setupStatistics(gameSession.playerWhite.getName(), R.id.player1)
-        setupStatistics(gameSession.playerBlack.getName(), R.id.player2)
+        setupStatistics(gameSession.playerWhite, R.id.player1)
+        setupStatistics(gameSession.playerBlack, R.id.player2)
 
 
         handler.postDelayed({
@@ -55,10 +56,16 @@ class GameActivity : AppCompatActivity() {
     }
 
 
-    private fun setupStatistics(playerStrategy: String, viewId: Int) {
-        val player = findViewById<View>(viewId)
+    @SuppressLint("SetTextI18n")
+    private fun setupStatistics(player: Player<Stone, Position>, viewId: Int) {
+        val playerView = findViewById<View>(viewId)
+        val stats = player.getStatistics()
 
-        player.findViewById<TextView>(R.id.txt_player).text = playerStrategy
+        playerView.findViewById<TextView>(R.id.txt_player).text = player.getName()
+        playerView.findViewById<TextView>(R.id.txt_setupTime).text = "Setup time: ${stats.getSetupThinkingTime()}s"
+        playerView.findViewById<TextView>(R.id.txt_moves).text = "Moves: ${stats.getTotalMove()}"
+        playerView.findViewById<TextView>(R.id.txt_thinkingTime).text = "Time: ${stats.getTotalThinkingTime()}s"
+        playerView.findViewById<TextView>(R.id.txt_timePerMove).text = "Time/move: ${stats.getTimePerMove()}s"
     }
 
     fun onBoardClick(view: View) {
@@ -87,6 +94,9 @@ class GameActivity : AppCompatActivity() {
                 }
             }
         }
+        setupStatistics(gameSession.playerWhite, R.id.player1)
+        setupStatistics(gameSession.playerBlack, R.id.player2)
+
         handler.postDelayed({
             updateBoard(gameSession.board)
         }, C.GAME_REFRESH_DELAY)

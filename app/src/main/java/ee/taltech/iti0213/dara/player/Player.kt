@@ -17,15 +17,24 @@ class Player<T: IStone, U:IPosition>(private val strategy: IStrategy<T, U>):
     }
 
     override suspend fun getPutMove(board: IBoard<T, U>): U {
-        return strategy.getPutMove(board)
+        val start = System.currentTimeMillis()
+        val move = strategy.getPutMove(board)
+        statistics.addSetupMove((System.currentTimeMillis() - start).toFloat())
+        return move
     }
 
     override suspend fun getMove(board: IBoard<T, U>): IMove<U> {
-        return strategy.getMove(board)
+        val start = System.currentTimeMillis()
+        val move = strategy.getMove(board)
+        statistics.addMove((System.currentTimeMillis() - start).toFloat())
+        return move
     }
 
     override suspend fun getTakeMove(board: IBoard<T, U>): U {
-        return strategy.getTakeMove(board)
+        val start = System.currentTimeMillis()
+        val move = strategy.getTakeMove(board)
+        statistics.addTakeMove((System.currentTimeMillis() - start).toFloat())
+        return move
     }
 
     override fun getStatistics(): Statistics {

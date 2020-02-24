@@ -51,7 +51,7 @@
 
     <style name="app_title">
         <item name="android:textColor">@color/colorLight</item>
-        <item name="android:textSize">48dp</item>
+        <item name="android:textSize">48sp</item>
     </style>
 
     <style name="player_select">

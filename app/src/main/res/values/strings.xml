@@ -7,7 +7,7 @@
     <string name="player_headline">Player</string>
     <string name="player_moves">Moves:</string>
     <string name="player_time">Time:</string>
-    <string name="player_time_per_move">Time per move:</string>
+    <string name="player_time_per_move">Time/move:</string>
     <string name="player1">Player1</string>
     <string name="player2">Player2</string>
 </resources>
