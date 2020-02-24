@@ -8,14 +8,10 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import ee.taltech.iti0213.dara.constants.C
 
 
 class MenuActivity : AppCompatActivity() {
-
-    companion object {
-        const val PLAYER1_STRATEGY_KEY: String = "player1_strategy"
-        const val PLAYER2_STRATEGY_KEY: String = "player2_strategy"
-    }
 
     private val strategies = listOf("Simple Randomness", "Human") // TODO: Auto scan classes
     private var player1Strategy: Int = 0
@@ -71,8 +67,8 @@ class MenuActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
-        player1Strategy = savedInstanceState?.getInt(PLAYER1_STRATEGY_KEY) ?: 0
-        player2Strategy = savedInstanceState?.getInt(PLAYER2_STRATEGY_KEY) ?: 0
+        player1Strategy = savedInstanceState?.getInt(C.PLAYER1_STRATEGY_KEY) ?: 0
+        player2Strategy = savedInstanceState?.getInt(C.PLAYER2_STRATEGY_KEY) ?: 0
 
         val player1 = findViewById<View>(R.id.player1)
         val player2 = findViewById<View>(R.id.player2)
@@ -86,8 +82,8 @@ class MenuActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         outState?.run {
-            putInt(PLAYER1_STRATEGY_KEY, player1Strategy)
-            putInt(PLAYER2_STRATEGY_KEY, player2Strategy)
+            putInt(C.PLAYER1_STRATEGY_KEY, player1Strategy)
+            putInt(C.PLAYER2_STRATEGY_KEY, player2Strategy)
         }
         // call superclass to save any view hierarchy
         super.onSaveInstanceState(outState)
@@ -96,6 +92,10 @@ class MenuActivity : AppCompatActivity() {
 
     fun onStartClicked(view: View) {
         val startGameIntent = Intent(this, GameActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString(C.PLAYER1_STRATEGY_KEY, strategies[player1Strategy])
+        bundle.putString(C.PLAYER2_STRATEGY_KEY, strategies[player2Strategy])
+        startGameIntent.putExtras(bundle)
         startActivity(startGameIntent)
     }
 }

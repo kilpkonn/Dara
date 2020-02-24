@@ -3,8 +3,8 @@
     <string name="app_title">Dara</string>
     <string name="btn_start">Start</string>
     <string name="player_select">Player</string>
-    <string name="player_name">Name:</string>
-    <string name="player_headline">Player 1:</string>
+    <string name="player_name">Setup time:</string>
+    <string name="player_headline">Player</string>
     <string name="player_moves">Moves:</string>
     <string name="player_time">Time:</string>
     <string name="player_time_per_move">Time per move:</string>

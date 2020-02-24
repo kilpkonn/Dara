@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         style="@style/player_stats_highlight"
-        app:constraint_referenced_ids="txt_player,txt_playerName,txt_moves,txt_thinkingTime,txt_timePerMove"
+        app:constraint_referenced_ids="txt_player,txt_setupTime,txt_moves,txt_thinkingTime,txt_timePerMove"
         app:layout_constraintStart_toStartOf="@id/txt_player"
         app:layout_constraintEnd_toEndOf="@id/txt_player"
         app:layout_constraintTop_toTopOf="@id/txt_player"
@@ -22,12 +22,12 @@
         style="@style/player_stats_text"
         android:paddingTop="@dimen/small_margin"
         android:text="@string/player_headline"
-        app:layout_constraintBottom_toTopOf="@id/txt_playerName"
+        app:layout_constraintBottom_toTopOf="@id/txt_setupTime"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txt_playerName"
+        android:id="@+id/txt_setupTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/player_stats_text"
@@ -44,7 +44,7 @@
         android:text="@string/player_moves"
         app:layout_constraintBottom_toTopOf="@id/txt_thinkingTime"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_playerName" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_setupTime" />
 
     <TextView
         android:id="@+id/txt_thinkingTime"
