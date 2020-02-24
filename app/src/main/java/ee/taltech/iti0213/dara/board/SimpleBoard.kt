@@ -21,7 +21,12 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
 
     override fun putStone(to: U): Boolean {
         if (matrix[to.getY()][to.getX()] != Stone.EMPTY) return false
-        if (gotRow(to.getY(), to.getX(), if (isWhiteToMove) Stone.WHITE else Stone.BLACK)) return false
+        if (gotRow(
+                to.getY(),
+                to.getX(),
+                if (isWhiteToMove) Stone.WHITE else Stone.BLACK
+            )
+        ) return false
         matrix[to.getY()][to.getX()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
         isWhiteToMove = !isWhiteToMove
         if (isWhiteToMove) {
@@ -44,6 +49,7 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
         if (matrix[from.getY()][from.getX()] == Stone.EMPTY) return false
         if (matrix[from.getY()][from.getX()] == if (!isWhiteToMove) Stone.WHITE else Stone.BLACK) return false
         matrix[from.getY()][from.getX()] = Stone.EMPTY
+        evaluateWin()
         return true
     }
 
@@ -86,6 +92,10 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
             left = if (x - i >= 0 && matrix[y][x - i] == stone) left else false
             right = if (x + i < width && matrix[y][x + i] == stone) right else false
         }
-        return upward || downward || left || right
+        val centerHorizontal =
+            0 < x && x + 1 < width && matrix[y][x - 1] == stone && matrix[y][x + 1] == stone
+        val centerVertical =
+            0 < y && y + 1 < height && matrix[y - 1][x] == stone && matrix[y + 1][x] == stone
+        return upward || downward || left || right || centerHorizontal || centerVertical
     }
 }

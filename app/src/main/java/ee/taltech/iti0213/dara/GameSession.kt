@@ -85,7 +85,7 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
     private fun setupPlayer(strategyString: String, isWhite: Boolean): Player<Stone, Position> {
         val strategy: IStrategy<Stone, Position> = when (strategyString) {
             "Simple Randomness" -> RandomStrategy(isWhite)
-            else -> HumanStrategy()
+            else -> HumanStrategy(isWhite)
         }
         return Player(strategy)
     }
