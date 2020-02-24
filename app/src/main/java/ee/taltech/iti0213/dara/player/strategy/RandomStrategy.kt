@@ -3,10 +3,10 @@ package ee.taltech.iti0213.dara.player.strategy
 import ee.taltech.iti0213.dara.board.*
 
 class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
-    override fun onUserClickedLocation(location: IPosition) { }
+    override fun onUserClickedLocation(location: Position) { }
 
-    override fun getPutMove(board: IBoard<T, IPosition>): IPosition {
-        val possibleMoves: MutableList<IPosition> = arrayListOf()
+    override fun getPutMove(board: IBoard<T, Position>): Position {
+        val possibleMoves: MutableList<Position> = arrayListOf()
         val matrix = board.getBoardMatrix()
         for (y in 0 until board.getHeight()) {
             for (x in 0 until board.getWidth()) {
@@ -17,8 +17,8 @@ class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         return possibleMoves.random()
     }
 
-    override fun getMove(board: IBoard<T, IPosition>): IMove<IPosition> {
-        val possibleFromPositions: MutableList<IPosition> = arrayListOf()
+    override fun getMove(board: IBoard<T, Position>): IMove<Position> {
+        val possibleFromPositions: MutableList<Position> = arrayListOf()
         val matrix = board.getBoardMatrix()
         for (y in 0 until board.getHeight()) {
             for (x in 0 until board.getWidth()) {
@@ -26,7 +26,7 @@ class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
                     possibleFromPositions.add(Position(y, x))
             }
         }
-        val possibleToPositions: MutableList<IPosition> = arrayListOf()
+        val possibleToPositions: MutableList<Position> = arrayListOf()
         for (y in 0 until board.getHeight()) {
             for (x in 0 until board.getWidth()) {
                 if (matrix[y][x].isEmpty())
@@ -36,8 +36,8 @@ class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         return Move(possibleFromPositions.random(), possibleToPositions.random())
     }
 
-    override fun getTakeMove(board: IBoard<T, IPosition>): IPosition {
-        val possibleMoves: MutableList<IPosition> = arrayListOf()
+    override fun getTakeMove(board: IBoard<T, Position>): Position {
+        val possibleMoves: MutableList<Position> = arrayListOf()
         val matrix = board.getBoardMatrix()
         for (y in 0 until board.getHeight()) {
             for (x in 0 until board.getWidth()) {

@@ -35,6 +35,11 @@ class GameActivity : AppCompatActivity() {
         }, C.GAME_REFRESH_DELAY)
     }
 
+    override fun onStart() {
+        super.onStart()
+        gameSession.playGame()
+    }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         outState?.run {
             putSerializable(C.GAME_SESSION_KEY, gameSession)
@@ -65,8 +70,9 @@ class GameActivity : AppCompatActivity() {
 
             if (child is Button) {
                 val idString = parent.resources.getResourceName(child.id)
-                val y = C.BOARD_HEIGHT - (idString[idString.lastIndex].toInt() - 'A'.toInt())
-                val x = idString[idString.lastIndex - 1].toInt() - '0'.toInt()
+                val a = idString[idString.lastIndex]
+                val x = idString[idString.lastIndex].toInt() - 'A'.toInt()
+                val y = Character.getNumericValue(idString[idString.lastIndex - 1])
 
                 if (board.getBoardMatrix()[y][x].isWhite())
                     child.foreground = resources.getDrawable(R.drawable.stone_triangle, theme)

@@ -8,7 +8,8 @@ import ee.taltech.iti0213.dara.player.statistics.Statistics
 import ee.taltech.iti0213.dara.player.strategy.IStrategy
 import java.io.Serializable
 
-class Player<T: IStone, U:IPosition>(private val strategy: IStrategy<T, U>): IPlayer<T, U>, Serializable {
+class Player<T: IStone, U:IPosition>(private val strategy: IStrategy<T, U>):
+    IPlayer<T, U>, Serializable {
     private val statistics: Statistics = Statistics()
 
     override fun onUserClickedLocation(location: U) {
