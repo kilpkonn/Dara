@@ -1,19 +1,20 @@
 package ee.taltech.iti0213.dara
 
-import android.graphics.Paint
-import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import ee.taltech.iti0213.dara.board.Position
+import ee.taltech.iti0213.dara.board.SimpleBoard
 import ee.taltech.iti0213.dara.constants.C
 
 class GameActivity : AppCompatActivity() {
 
     private lateinit var gameSession: GameSession
+    private var handler: Handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,11 @@ class GameActivity : AppCompatActivity() {
 
         setupStatistics(gameSession.playerWhite.getName(), R.id.player1)
         setupStatistics(gameSession.playerBlack.getName(), R.id.player2)
+
+
+        handler.postDelayed({
+            updateBoard(gameSession.board)
+        }, C.GAME_REFRESH_DELAY)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -45,7 +51,31 @@ class GameActivity : AppCompatActivity() {
 
     fun onBoardClick(view: View) {
         val id = view.id
-        //findViewById<Button>(id).background = resources.getDrawable(R.drawable.stone_triangle)
-        findViewById<Button>(id).foreground = resources.getDrawable(R.drawable.stone_triangle)
+        val idString = view.resources.getResourceName(id)
+        val y = C.BOARD_HEIGHT - (idString[idString.lastIndex].toInt() - 'A'.toInt())
+        val x = idString[idString.lastIndex - 1].toInt() - '0'.toInt()
+        gameSession.onButtonClick(Position(y, x))
+        //findViewById<Button>(id).foreground = resources.getDrawable(R.drawable.stone_triangle, theme)
+    }
+
+    private fun updateBoard(board: SimpleBoard<Position>) {
+        val parent = findViewById<ViewGroup>(R.id.board)
+        for (i in 0 until parent.childCount) {
+            val child = parent.getChildAt(i)
+
+            if (child is Button) {
+                val idString = parent.resources.getResourceName(child.id)
+                val y = C.BOARD_HEIGHT - (idString[idString.lastIndex].toInt() - 'A'.toInt())
+                val x = idString[idString.lastIndex - 1].toInt() - '0'.toInt()
+
+                if (board.getBoardMatrix()[y][x].isWhite())
+                    child.foreground = resources.getDrawable(R.drawable.stone_triangle, theme)
+                if (board.getBoardMatrix()[y][x].isBlack())
+                    child.foreground = resources.getDrawable(R.drawable.stone_square, theme)
+                else
+                    child.foreground = null
+            }
+        }
+
     }
 }

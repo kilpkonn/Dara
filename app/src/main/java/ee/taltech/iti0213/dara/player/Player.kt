@@ -6,9 +6,14 @@ import ee.taltech.iti0213.dara.board.IPosition
 import ee.taltech.iti0213.dara.board.IStone
 import ee.taltech.iti0213.dara.player.statistics.Statistics
 import ee.taltech.iti0213.dara.player.strategy.IStrategy
+import java.io.Serializable
 
-class Player<T: IStone, U:IPosition>(private val strategy: IStrategy<T, U>): IPlayer<T, U> {
+class Player<T: IStone, U:IPosition>(private val strategy: IStrategy<T, U>): IPlayer<T, U>, Serializable {
     private val statistics: Statistics = Statistics()
+
+    override fun onUserClickedLocation(location: U) {
+        strategy.onUserClickedLocation(location)
+    }
 
     override fun getPutMove(board: IBoard<T, U>): U {
         return strategy.getPutMove(board)

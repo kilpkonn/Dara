@@ -1,6 +1,8 @@
 package ee.taltech.iti0213.dara.player.statistics
 
-class Statistics {
+import java.io.Serializable
+
+class Statistics: Serializable {
     private var moves: Int = 0
     private var setupThinkingTime: Float = 0f
     private var totalThinkingTime: Float = 0f

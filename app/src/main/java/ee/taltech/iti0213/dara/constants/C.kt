@@ -8,6 +8,8 @@ class C {
         const val BOARD_HEIGHT: Int = 6
         const val BOARD_WIDTH: Int = 5
 
-        const val GAME_SESSION_KEY = "game_session"
+        const val GAME_SESSION_KEY: String = "game_session"
+
+        const val GAME_REFRESH_DELAY: Long = 50L
     }
 }

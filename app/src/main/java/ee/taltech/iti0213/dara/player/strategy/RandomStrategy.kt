@@ -3,6 +3,7 @@ package ee.taltech.iti0213.dara.player.strategy
 import ee.taltech.iti0213.dara.board.*
 
 class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
+    override fun onUserClickedLocation(location: IPosition) { }
 
     override fun getPutMove(board: IBoard<T, IPosition>): IPosition {
         val possibleMoves: MutableList<IPosition> = arrayListOf()

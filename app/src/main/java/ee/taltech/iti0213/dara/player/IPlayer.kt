@@ -8,6 +8,7 @@ import ee.taltech.iti0213.dara.player.statistics.Statistics
 
 interface IPlayer<T: IStone, U: IPosition> {
 
+    fun onUserClickedLocation(location: U)
     fun getPutMove(board: IBoard<T, U>): U
     fun getMove(board: IBoard<T, U>): IMove<U>
     fun fetTakeMove(board: IBoard<T, U>): U
