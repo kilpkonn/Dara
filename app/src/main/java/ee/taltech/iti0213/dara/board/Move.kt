@@ -10,4 +10,9 @@ class Move<T: IPosition>(private val from: T, private val to: T): IMove<T> {
         return to
     }
 
+    override fun toString(): String {
+        return "Move $from -> $to)"
+    }
+
+
 }

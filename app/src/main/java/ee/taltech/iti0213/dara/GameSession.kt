@@ -12,6 +12,7 @@ import ee.taltech.iti0213.dara.player.strategy.IStrategy
 import ee.taltech.iti0213.dara.player.strategy.RandomStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.Serializable
 
@@ -46,19 +47,20 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
                 }
             if (board.putStone(putMove)) {
                 isWhiteToMove = !isWhiteToMove
-                Log.d(TAG, "Stone put to: ${putMove.getY()}, ${putMove.getX()}")
+                Log.d(TAG, "Stone put to: $putMove")
             }
         }
         Log.d(TAG, "All stones have been placed!")
 
         while (board.getGameState() == GameState.PLAYING) {
-            Log.d(TAG, "Take stone! White to move: $isWhiteToMove")
+            Log.d(TAG, "Make move! White to move: $isWhiteToMove")
             val move =
                 withContext(coroutineScope.coroutineContext + Dispatchers.Default) {
                     if (isWhiteToMove) playerWhite.getMove(board)
                     else playerBlack.getMove(board)
                 }
             val moveRes = board.makeMove(move)
+            Log.d(TAG, move.toString())
 
             if (moveRes >= 1) {
                 do {
@@ -69,13 +71,14 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
                         }
                     val takeRes = board.takeStone(takeMove)
                     if (takeRes) {
-                        Log.d(TAG, "Stone taken from: ${takeMove.getY()}, ${takeMove.getX()}")
+                        Log.d(TAG, "Stone taken from: $takeMove")
                     }
                 } while (!takeRes)
             }
             if (moveRes >= 0) {
                 isWhiteToMove = !isWhiteToMove
             }
+            //delay(100) // To see something
         }
     }
 

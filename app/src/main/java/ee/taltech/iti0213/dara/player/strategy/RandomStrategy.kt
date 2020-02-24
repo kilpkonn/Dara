@@ -41,7 +41,7 @@ class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         val matrix = board.getBoardMatrix()
         for (y in 0 until board.getHeight()) {
             for (x in 0 until board.getWidth()) {
-                if (matrix[y][x].isWhite() && isWhite || matrix[y][x].isBlack() && !isWhite)
+                if (matrix[y][x].isWhite() && !isWhite || matrix[y][x].isBlack() && isWhite)
                     possibleMoves.add(Position(y, x))
             }
         }

@@ -28,5 +28,9 @@ class Position(private val y: Int, private val x: Int) : IPosition {
         return result
     }
 
+    override fun toString(): String {
+        return "($y, $x)"
+    }
+
 
 }
