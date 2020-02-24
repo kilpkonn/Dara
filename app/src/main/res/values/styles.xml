@@ -25,6 +25,14 @@
         <item name="android:layout_margin">@dimen/button_margin</item>
     </style>
 
+    <style name="game_board_button.triangle" parent="game_board_button">
+        <item name="android:foreground">@drawable/stone_triangle</item>
+    </style>
+
+    <style name="game_board_button.square" parent="game_board_button">
+        <item name="android:foreground">@drawable/stone_square</item>
+    </style>
+
     <style name="player_stats">
         <item name="android:background">@drawable/stats_background_gradient</item>
         <item name="android:padding">@dimen/small_margin</item>

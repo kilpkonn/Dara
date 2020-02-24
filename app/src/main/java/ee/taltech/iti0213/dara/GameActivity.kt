@@ -1,16 +1,15 @@
 package ee.taltech.iti0213.dara
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Paint
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
-import ee.taltech.iti0213.dara.board.*
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import ee.taltech.iti0213.dara.constants.C
-import ee.taltech.iti0213.dara.player.Player
-import ee.taltech.iti0213.dara.player.strategy.HumanStrategy
-import ee.taltech.iti0213.dara.player.strategy.IStrategy
-import ee.taltech.iti0213.dara.player.strategy.RandomStrategy
 
 class GameActivity : AppCompatActivity() {
 
@@ -42,5 +41,11 @@ class GameActivity : AppCompatActivity() {
         val player = findViewById<View>(viewId)
 
         player.findViewById<TextView>(R.id.txt_player).text = playerStrategy
+    }
+
+    fun onBoardClick(view: View) {
+        val id = view.id
+        //findViewById<Button>(id).background = resources.getDrawable(R.drawable.stone_triangle)
+        findViewById<Button>(id).foreground = resources.getDrawable(R.drawable.stone_triangle)
     }
 }
