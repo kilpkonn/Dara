@@ -12,9 +12,14 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MenuActivity : AppCompatActivity() {
 
+    companion object {
+        const val PLAYER1_STRATEGY_KEY: String = "player1_strategy"
+        const val PLAYER2_STRATEGY_KEY: String = "player2_strategy"
+    }
+
     private val strategies = listOf("Simple Randomness", "Human") // TODO: Auto scan classes
-    private var player1Strategy: String = strategies[0]
-    private var player2Strategy: String = strategies[0]
+    private var player1Strategy: Int = 0
+    private var player2Strategy: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +44,54 @@ class MenuActivity : AppCompatActivity() {
         player2Spinner.adapter = adapter
 
         player1Spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                player1Strategy = parent.getItemAtPosition(position).toString()
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                player1Strategy = position
             }
+
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
         player2Spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                player2Strategy = parent.getItemAtPosition(position).toString()
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                player2Strategy = position
             }
+
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        player1Strategy = savedInstanceState?.getInt(PLAYER1_STRATEGY_KEY) ?: 0
+        player2Strategy = savedInstanceState?.getInt(PLAYER2_STRATEGY_KEY) ?: 0
+
+        val player1 = findViewById<View>(R.id.player1)
+        val player2 = findViewById<View>(R.id.player2)
+
+        val player1Spinner = player1.findViewById<Spinner>(R.id.spinner)
+        val player2Spinner = player2.findViewById<Spinner>(R.id.spinner)
+
+        player1Spinner.setSelection(player1Strategy)
+        player2Spinner.setSelection(player2Strategy)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.run {
+            putInt(PLAYER1_STRATEGY_KEY, player1Strategy)
+            putInt(PLAYER2_STRATEGY_KEY, player2Strategy)
+        }
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(outState)
+
     }
 
     fun onStartClicked(view: View) {
