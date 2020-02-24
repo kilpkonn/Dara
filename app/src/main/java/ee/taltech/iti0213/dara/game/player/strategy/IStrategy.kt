@@ -1,9 +1,9 @@
-package ee.taltech.iti0213.dara.player.strategy
+package ee.taltech.iti0213.dara.game.player.strategy
 
-import ee.taltech.iti0213.dara.board.IBoard
-import ee.taltech.iti0213.dara.board.IMove
-import ee.taltech.iti0213.dara.board.IPosition
-import ee.taltech.iti0213.dara.board.IStone
+import ee.taltech.iti0213.dara.game.board.IBoard
+import ee.taltech.iti0213.dara.game.board.IMove
+import ee.taltech.iti0213.dara.game.board.IPosition
+import ee.taltech.iti0213.dara.game.board.IStone
 
 interface IStrategy<T: IStone, U: IPosition> {
 

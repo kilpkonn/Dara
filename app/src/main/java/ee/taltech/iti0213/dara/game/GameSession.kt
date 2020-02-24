@@ -1,18 +1,17 @@
-package ee.taltech.iti0213.dara
+package ee.taltech.iti0213.dara.game
 
 import android.util.Log
-import ee.taltech.iti0213.dara.board.Position
-import ee.taltech.iti0213.dara.board.SimpleBoard
-import ee.taltech.iti0213.dara.board.Stone
-import ee.taltech.iti0213.dara.board.enums.GameState
-import ee.taltech.iti0213.dara.constants.C
-import ee.taltech.iti0213.dara.player.Player
-import ee.taltech.iti0213.dara.player.strategy.HumanStrategy
-import ee.taltech.iti0213.dara.player.strategy.IStrategy
-import ee.taltech.iti0213.dara.player.strategy.RandomStrategy
+import ee.taltech.iti0213.dara.game.board.Position
+import ee.taltech.iti0213.dara.game.board.SimpleBoard
+import ee.taltech.iti0213.dara.game.board.Stone
+import ee.taltech.iti0213.dara.game.board.enums.GameState
+import ee.taltech.iti0213.dara.game.constants.C
+import ee.taltech.iti0213.dara.game.player.Player
+import ee.taltech.iti0213.dara.game.player.strategy.HumanStrategy
+import ee.taltech.iti0213.dara.game.player.strategy.IStrategy
+import ee.taltech.iti0213.dara.game.player.strategy.RandomStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.Serializable
 

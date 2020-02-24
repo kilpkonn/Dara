@@ -1,7 +1,7 @@
-package ee.taltech.iti0213.dara.board
+package ee.taltech.iti0213.dara.game.board
 
-import ee.taltech.iti0213.dara.board.enums.GameState
-import ee.taltech.iti0213.dara.constants.C
+import ee.taltech.iti0213.dara.game.board.enums.GameState
+import ee.taltech.iti0213.dara.game.constants.C
 
 
 class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int) :

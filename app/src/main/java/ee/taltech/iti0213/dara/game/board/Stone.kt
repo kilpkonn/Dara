@@ -1,4 +1,4 @@
-package ee.taltech.iti0213.dara.board
+package ee.taltech.iti0213.dara.game.board
 
 enum class Stone : IStone{
     EMPTY {

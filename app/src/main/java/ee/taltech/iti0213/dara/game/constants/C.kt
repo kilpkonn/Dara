@@ -1,4 +1,4 @@
-package ee.taltech.iti0213.dara.constants
+package ee.taltech.iti0213.dara.game.constants
 
 class C {
     companion object {

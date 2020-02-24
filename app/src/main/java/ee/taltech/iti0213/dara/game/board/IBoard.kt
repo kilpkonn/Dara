@@ -1,6 +1,6 @@
-package ee.taltech.iti0213.dara.board
+package ee.taltech.iti0213.dara.game.board
 
-import ee.taltech.iti0213.dara.board.enums.GameState
+import ee.taltech.iti0213.dara.game.board.enums.GameState
 import java.io.Serializable
 
 interface IBoard <T : IStone, U : IPosition>: Serializable {

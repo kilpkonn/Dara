@@ -1,6 +1,6 @@
-package ee.taltech.iti0213.dara.player.strategy
+package ee.taltech.iti0213.dara.game.player.strategy
 
-import ee.taltech.iti0213.dara.board.*
+import ee.taltech.iti0213.dara.game.board.*
 import kotlinx.coroutines.delay
 
 class HumanStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {

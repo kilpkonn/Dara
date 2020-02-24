@@ -1,4 +1,4 @@
-package ee.taltech.iti0213.dara.player.statistics
+package ee.taltech.iti0213.dara.game.player.statistics
 
 import java.io.Serializable
 import kotlin.math.roundToInt

@@ -1,6 +1,6 @@
-package ee.taltech.iti0213.dara.player.strategy
+package ee.taltech.iti0213.dara.game.player.strategy
 
-import ee.taltech.iti0213.dara.board.*
+import ee.taltech.iti0213.dara.game.board.*
 
 class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     override fun onUserClickedLocation(location: Position) { }

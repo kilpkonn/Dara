@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import ee.taltech.iti0213.dara.constants.C
+import ee.taltech.iti0213.dara.game.constants.C
 
 
 class MenuActivity : AppCompatActivity() {

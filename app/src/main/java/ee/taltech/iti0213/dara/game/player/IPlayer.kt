@@ -1,10 +1,10 @@
-package ee.taltech.iti0213.dara.player
+package ee.taltech.iti0213.dara.game.player
 
-import ee.taltech.iti0213.dara.board.IBoard
-import ee.taltech.iti0213.dara.board.IMove
-import ee.taltech.iti0213.dara.board.IPosition
-import ee.taltech.iti0213.dara.board.IStone
-import ee.taltech.iti0213.dara.player.statistics.Statistics
+import ee.taltech.iti0213.dara.game.board.IBoard
+import ee.taltech.iti0213.dara.game.board.IMove
+import ee.taltech.iti0213.dara.game.board.IPosition
+import ee.taltech.iti0213.dara.game.board.IStone
+import ee.taltech.iti0213.dara.game.player.statistics.Statistics
 
 interface IPlayer<T: IStone, U: IPosition> {
 
