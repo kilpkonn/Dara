@@ -2,6 +2,7 @@ package ee.taltech.iti0213.dara
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -10,11 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 import ee.taltech.iti0213.dara.board.Position
 import ee.taltech.iti0213.dara.board.SimpleBoard
 import ee.taltech.iti0213.dara.constants.C
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class GameActivity : AppCompatActivity() {
 
     private lateinit var gameSession: GameSession
     private var handler: Handler = Handler()
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +42,9 @@ class GameActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        gameSession.playGame()
+        coroutineScope.launch {
+            gameSession.playGame()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -57,8 +64,8 @@ class GameActivity : AppCompatActivity() {
     fun onBoardClick(view: View) {
         val id = view.id
         val idString = view.resources.getResourceName(id)
-        val y = C.BOARD_HEIGHT - (idString[idString.lastIndex].toInt() - 'A'.toInt())
-        val x = idString[idString.lastIndex - 1].toInt() - '0'.toInt()
+        val x = idString[idString.lastIndex].toInt() - 'A'.toInt()
+        val y = Character.getNumericValue(idString[idString.lastIndex - 1])
         gameSession.onButtonClick(Position(y, x))
         //findViewById<Button>(id).foreground = resources.getDrawable(R.drawable.stone_triangle, theme)
     }
@@ -70,18 +77,19 @@ class GameActivity : AppCompatActivity() {
 
             if (child is Button) {
                 val idString = parent.resources.getResourceName(child.id)
-                val a = idString[idString.lastIndex]
                 val x = idString[idString.lastIndex].toInt() - 'A'.toInt()
                 val y = Character.getNumericValue(idString[idString.lastIndex - 1])
 
-                if (board.getBoardMatrix()[y][x].isWhite())
-                    child.foreground = resources.getDrawable(R.drawable.stone_triangle, theme)
-                if (board.getBoardMatrix()[y][x].isBlack())
-                    child.foreground = resources.getDrawable(R.drawable.stone_square, theme)
-                else
-                    child.foreground = null
+                when {
+                    board.getBoardMatrix()[y][x].isWhite() -> child.foreground = resources.getDrawable(R.drawable.stone_triangle, theme)
+                    board.getBoardMatrix()[y][x].isBlack() -> child.foreground = resources.getDrawable(R.drawable.stone_square, theme)
+                    else -> child.foreground = null
+                }
             }
         }
+        handler.postDelayed({
+            updateBoard(gameSession.board)
+        }, C.GAME_REFRESH_DELAY)
 
     }
 }

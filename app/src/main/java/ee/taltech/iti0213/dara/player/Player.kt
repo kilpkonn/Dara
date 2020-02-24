@@ -16,15 +16,15 @@ class Player<T: IStone, U:IPosition>(private val strategy: IStrategy<T, U>):
         strategy.onUserClickedLocation(location)
     }
 
-    override fun getPutMove(board: IBoard<T, U>): U {
+    override suspend fun getPutMove(board: IBoard<T, U>): U {
         return strategy.getPutMove(board)
     }
 
-    override fun getMove(board: IBoard<T, U>): IMove<U> {
+    override suspend fun getMove(board: IBoard<T, U>): IMove<U> {
         return strategy.getMove(board)
     }
 
-    override fun fetTakeMove(board: IBoard<T, U>): U {
+    override suspend fun fetTakeMove(board: IBoard<T, U>): U {
         return strategy.getTakeMove(board)
     }
 

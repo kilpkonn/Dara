@@ -5,7 +5,7 @@ import ee.taltech.iti0213.dara.board.*
 class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     override fun onUserClickedLocation(location: Position) { }
 
-    override fun getPutMove(board: IBoard<T, Position>): Position {
+    override suspend fun getPutMove(board: IBoard<T, Position>): Position {
         val possibleMoves: MutableList<Position> = arrayListOf()
         val matrix = board.getBoardMatrix()
         for (y in 0 until board.getHeight()) {
@@ -17,7 +17,7 @@ class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         return possibleMoves.random()
     }
 
-    override fun getMove(board: IBoard<T, Position>): IMove<Position> {
+    override suspend fun getMove(board: IBoard<T, Position>): IMove<Position> {
         val possibleFromPositions: MutableList<Position> = arrayListOf()
         val matrix = board.getBoardMatrix()
         for (y in 0 until board.getHeight()) {
@@ -36,7 +36,7 @@ class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         return Move(possibleFromPositions.random(), possibleToPositions.random())
     }
 
-    override fun getTakeMove(board: IBoard<T, Position>): Position {
+    override suspend fun getTakeMove(board: IBoard<T, Position>): Position {
         val possibleMoves: MutableList<Position> = arrayListOf()
         val matrix = board.getBoardMatrix()
         for (y in 0 until board.getHeight()) {

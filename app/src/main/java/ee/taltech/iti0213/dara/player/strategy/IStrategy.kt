@@ -8,8 +8,8 @@ import ee.taltech.iti0213.dara.board.IStone
 interface IStrategy<T: IStone, U: IPosition> {
 
     fun onUserClickedLocation(location: U)
-    fun getPutMove(board: IBoard<T, U>): U
-    fun getMove(board: IBoard<T, U>): IMove<U>
-    fun getTakeMove(board: IBoard<T, U>): U
+    suspend fun getPutMove(board: IBoard<T, U>): U
+    suspend fun getMove(board: IBoard<T, U>): IMove<U>
+    suspend fun getTakeMove(board: IBoard<T, U>): U
     fun getName(): String
 }

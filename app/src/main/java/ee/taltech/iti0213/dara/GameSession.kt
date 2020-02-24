@@ -1,5 +1,6 @@
 package ee.taltech.iti0213.dara
 
+import android.util.Log
 import ee.taltech.iti0213.dara.board.Position
 import ee.taltech.iti0213.dara.board.SimpleBoard
 import ee.taltech.iti0213.dara.board.Stone
@@ -10,7 +11,7 @@ import ee.taltech.iti0213.dara.player.strategy.IStrategy
 import ee.taltech.iti0213.dara.player.strategy.RandomStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 import java.io.Serializable
 
 class GameSession(player1Strategy: String, player2Strategy: String) : Serializable {
@@ -30,16 +31,14 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
         playerBlack.onUserClickedLocation(location)
     }
 
-    fun playGame() {
-        coroutineScope.launch {
+    suspend fun playGame() {
             while (true) {
-                if (isWhiteToMove) {
-                    board.putStone(playerWhite.getPutMove(board))
-                } else {
-                    board.putStone(playerBlack.getPutMove(board))
-                }
+                val move = coroutineScope.async(Dispatchers.Default) {
+                    if (isWhiteToMove) playerWhite.getPutMove(board) else playerBlack.getPutMove(board)
+                }.await()
+                board.putStone(move)
+                Log.d("tag", "Stone to $move")
             }
-        }
     }
 
     private fun setupPlayer(strategyString: String, isWhite: Boolean): Player<Stone, Position> {
