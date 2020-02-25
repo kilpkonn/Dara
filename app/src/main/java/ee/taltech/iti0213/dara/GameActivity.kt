@@ -1,6 +1,7 @@
 package ee.taltech.iti0213.dara
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -8,17 +9,22 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import ee.taltech.iti0213.dara.game.board.*
-import ee.taltech.iti0213.dara.game.constants.C
 import ee.taltech.iti0213.dara.game.GameSession
+import ee.taltech.iti0213.dara.game.board.Position
+import ee.taltech.iti0213.dara.game.board.SimpleBoard
+import ee.taltech.iti0213.dara.game.board.Stone
+import ee.taltech.iti0213.dara.game.board.enums.GameState
+import ee.taltech.iti0213.dara.game.constants.C
 import ee.taltech.iti0213.dara.game.player.Player
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
 class GameActivity : AppCompatActivity() {
 
     private lateinit var gameSession: GameSession
+    private lateinit var lastGameState: GameState
     private var handler: Handler = Handler()
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -31,6 +37,7 @@ class GameActivity : AppCompatActivity() {
 
         gameSession = savedInstanceState?.getSerializable(C.GAME_SESSION_KEY) as GameSession?
             ?: GameSession(player1Strategy, player2Strategy)
+        lastGameState = gameSession.board.getGameState()
 
         setupStatistics(gameSession.playerWhite, R.id.player1)
         setupStatistics(gameSession.playerBlack, R.id.player2)
@@ -94,12 +101,24 @@ class GameActivity : AppCompatActivity() {
                 }
             }
         }
+
+        if (gameSession.board.getGameState() == GameState.PLAYING && lastGameState != GameState.PLAYING) {
+            openDialog()
+            lastGameState = board.getGameState()
+        }
+
         setupStatistics(gameSession.playerWhite, R.id.player1)
         setupStatistics(gameSession.playerBlack, R.id.player2)
 
         handler.postDelayed({
             updateBoard(gameSession.board)
         }, C.GAME_REFRESH_DELAY)
+    }
 
+    fun openDialog() {
+        val dialog = Dialog(this) // Context, this, etc.
+        dialog.setContentView(R.layout.banner)
+        dialog.setTitle("Title")
+        dialog.show()
     }
 }
