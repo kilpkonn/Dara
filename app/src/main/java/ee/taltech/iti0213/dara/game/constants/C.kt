@@ -13,5 +13,6 @@ class C {
 
         const val GAME_REFRESH_DELAY: Long = 50L
         const val BANNER_LIFE_LENGTH: Long = 2 * 1000L
+        const val BANNER_MIN_HEIGHT: Int = 200
     }
 }

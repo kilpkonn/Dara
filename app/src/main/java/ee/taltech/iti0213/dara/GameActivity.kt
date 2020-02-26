@@ -53,6 +53,7 @@ class GameActivity : AppCompatActivity() {
         handler.postDelayed({
             updateBoard(gameSession.board)
         }, C.GAME_REFRESH_DELAY)
+        //actionBar?.hide()
     }
 
     override fun onStart() {
@@ -138,7 +139,8 @@ class GameActivity : AppCompatActivity() {
         runOnUiThread {
             val dialog = Dialog(this)
             val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
-            val height = (resources.displayMetrics.heightPixels * 0.3).toInt()
+            var height = (resources.displayMetrics.heightPixels * 0.3).toInt()
+            if (height < C.BANNER_MIN_HEIGHT) height = C.BANNER_MIN_HEIGHT
             dialog.setContentView(R.layout.banner)
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.window?.setLayout(width, height)
