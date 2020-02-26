@@ -51,7 +51,7 @@
 
     <style name="app_title">
         <item name="android:textColor">@color/colorLight</item>
-        <item name="android:textSize">48sp</item>
+        <item name="android:textSize">@dimen/title_size</item>
     </style>
 
     <style name="player_select">
@@ -60,7 +60,7 @@
     </style>
 
     <style name="banner">
-        <item name="android:textSize">32sp</item>
+        <item name="android:textSize">@dimen/banner_text_size</item>
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center</item>
     </style>
