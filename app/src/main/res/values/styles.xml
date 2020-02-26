@@ -39,7 +39,7 @@
     </style>
 
     <style name="player_stats_highlight">
-        <item name="android:background">@drawable/player_stats_highlight_gradient</item>
+        <item name="android:background">@drawable/highlight_gradient_medium</item>
         <item name="android:padding">@dimen/small_margin</item>
     </style>
 
@@ -57,6 +57,12 @@
     <style name="player_select">
         <item name="android:background">@drawable/player_select_background_gradient</item>
         <item name="android:popupBackground">@drawable/player_select_background_gradient</item>
+    </style>
+
+    <style name="banner">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="start_button">

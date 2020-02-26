@@ -12,5 +12,6 @@ class C {
         const val GAME_SESSION_KEY: String = "game_session"
 
         const val GAME_REFRESH_DELAY: Long = 50L
+        const val BANNER_LIFE_LENGTH: Long = 2 * 1000L
     }
 }

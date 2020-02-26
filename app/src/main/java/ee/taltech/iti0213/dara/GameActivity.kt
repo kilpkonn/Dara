@@ -1,7 +1,10 @@
 package ee.taltech.iti0213.dara
 
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -103,7 +106,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         if (gameSession.board.getGameState() == GameState.PLAYING && lastGameState != GameState.PLAYING) {
-            openDialog()
+            openDialog("Setup complete!")
             lastGameState = board.getGameState()
         }
 
@@ -115,10 +118,18 @@ class GameActivity : AppCompatActivity() {
         }, C.GAME_REFRESH_DELAY)
     }
 
-    fun openDialog() {
+    private fun openDialog(text: String) {
         val dialog = Dialog(this) // Context, this, etc.
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        val height = (resources.displayMetrics.heightPixels * 0.3).toInt()
         dialog.setContentView(R.layout.banner)
-        dialog.setTitle("Title")
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(width, height)
+        dialog.findViewById<TextView>(R.id.txt_banner).text = text
+        dialog.setCancelable(true)
+        handler.postDelayed({
+            dialog.dismiss()
+        }, C.BANNER_LIFE_LENGTH)
         dialog.show()
     }
 }
