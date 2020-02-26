@@ -24,6 +24,10 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
     val playerWhite: Player<Stone, Position>
     val playerBlack: Player<Stone, Position>
     val board = SimpleBoard<Position>(C.BOARD_HEIGHT, C.BOARD_WIDTH)
+    @Transient var onSetupOver: Runnable? = null
+    @Transient var onGameOver: Runnable? = null
+
+    @Transient
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
     private var isWhiteToMove: Boolean = true
 
@@ -50,6 +54,7 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
             }
         }
         Log.d(TAG, "All stones have been placed!")
+        onSetupOver?.run()
 
         while (board.getGameState() == GameState.PLAYING) {
             Log.d(TAG, "Make move! White to move: $isWhiteToMove")
@@ -79,6 +84,7 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
             }
             //delay(100) // To see something
         }
+        onGameOver?.run()
     }
 
     private fun setupPlayer(strategyString: String, isWhite: Boolean): Player<Stone, Position> {

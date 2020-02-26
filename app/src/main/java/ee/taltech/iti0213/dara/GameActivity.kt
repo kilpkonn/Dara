@@ -1,8 +1,8 @@
 package ee.taltech.iti0213.dara
 
 import android.annotation.SuppressLint
-import android.app.ActionBar
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -16,7 +16,6 @@ import ee.taltech.iti0213.dara.game.GameSession
 import ee.taltech.iti0213.dara.game.board.Position
 import ee.taltech.iti0213.dara.game.board.SimpleBoard
 import ee.taltech.iti0213.dara.game.board.Stone
-import ee.taltech.iti0213.dara.game.board.enums.GameState
 import ee.taltech.iti0213.dara.game.constants.C
 import ee.taltech.iti0213.dara.game.player.Player
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +26,6 @@ import kotlinx.coroutines.launch
 class GameActivity : AppCompatActivity() {
 
     private lateinit var gameSession: GameSession
-    private lateinit var lastGameState: GameState
     private var handler: Handler = Handler()
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -40,7 +38,12 @@ class GameActivity : AppCompatActivity() {
 
         gameSession = savedInstanceState?.getSerializable(C.GAME_SESSION_KEY) as GameSession?
             ?: GameSession(player1Strategy, player2Strategy)
-        lastGameState = gameSession.board.getGameState()
+        gameSession.onSetupOver = Runnable { openDialog("Setup complete!") }
+        gameSession.onGameOver = Runnable {
+            openDialog("Game over!", Runnable {
+                    startActivity(Intent(this, MenuActivity::class.java))
+                })
+        }
 
         setupStatistics(gameSession.playerWhite, R.id.player1)
         setupStatistics(gameSession.playerBlack, R.id.player2)
@@ -72,10 +75,13 @@ class GameActivity : AppCompatActivity() {
         val stats = player.getStatistics()
 
         playerView.findViewById<TextView>(R.id.txt_player).text = player.getName()
-        playerView.findViewById<TextView>(R.id.txt_setupTime).text = "Setup time: ${stats.getSetupThinkingTime()}s"
+        playerView.findViewById<TextView>(R.id.txt_setupTime).text =
+            "Setup time: ${stats.getSetupThinkingTime()}s"
         playerView.findViewById<TextView>(R.id.txt_moves).text = "Moves: ${stats.getTotalMove()}"
-        playerView.findViewById<TextView>(R.id.txt_thinkingTime).text = "Time: ${stats.getTotalThinkingTime()}s"
-        playerView.findViewById<TextView>(R.id.txt_timePerMove).text = "Time/move: ${stats.getTimePerMove()}s"
+        playerView.findViewById<TextView>(R.id.txt_thinkingTime).text =
+            "Time: ${stats.getTotalThinkingTime()}s"
+        playerView.findViewById<TextView>(R.id.txt_timePerMove).text =
+            "Time/move: ${stats.getTimePerMove()}s"
     }
 
     fun onBoardClick(view: View) {
@@ -98,16 +104,13 @@ class GameActivity : AppCompatActivity() {
                 val y = Character.getNumericValue(idString[idString.lastIndex - 1])
 
                 when {
-                    board.getBoardMatrix()[y][x].isWhite() -> child.foreground = resources.getDrawable(R.drawable.stone_triangle, theme)
-                    board.getBoardMatrix()[y][x].isBlack() -> child.foreground = resources.getDrawable(R.drawable.stone_square, theme)
+                    board.getBoardMatrix()[y][x].isWhite() -> child.foreground =
+                        resources.getDrawable(R.drawable.stone_triangle, theme)
+                    board.getBoardMatrix()[y][x].isBlack() -> child.foreground =
+                        resources.getDrawable(R.drawable.stone_square, theme)
                     else -> child.foreground = null
                 }
             }
-        }
-
-        if (gameSession.board.getGameState() == GameState.PLAYING && lastGameState != GameState.PLAYING) {
-            openDialog("Setup complete!")
-            lastGameState = board.getGameState()
         }
 
         setupStatistics(gameSession.playerWhite, R.id.player1)
@@ -118,18 +121,23 @@ class GameActivity : AppCompatActivity() {
         }, C.GAME_REFRESH_DELAY)
     }
 
-    private fun openDialog(text: String) {
-        val dialog = Dialog(this) // Context, this, etc.
-        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
-        val height = (resources.displayMetrics.heightPixels * 0.3).toInt()
-        dialog.setContentView(R.layout.banner)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.setLayout(width, height)
-        dialog.findViewById<TextView>(R.id.txt_banner).text = text
-        dialog.setCancelable(true)
-        handler.postDelayed({
-            dialog.dismiss()
-        }, C.BANNER_LIFE_LENGTH)
-        dialog.show()
+    private fun openDialog(text: String, onClose: Runnable? = null) {
+        runOnUiThread {
+            val dialog = Dialog(this)
+            val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+            val height = (resources.displayMetrics.heightPixels * 0.3).toInt()
+            dialog.setContentView(R.layout.banner)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.setLayout(width, height)
+            dialog.findViewById<TextView>(R.id.txt_banner).text = text
+            dialog.setCancelable(true)
+            dialog.show()
+            handler.postDelayed({
+                dialog.dismiss()
+            }, C.BANNER_LIFE_LENGTH)
+            dialog.setOnDismissListener {
+                onClose?.run()
+            }
+        }
     }
 }

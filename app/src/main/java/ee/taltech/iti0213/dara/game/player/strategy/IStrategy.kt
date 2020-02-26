@@ -4,8 +4,9 @@ import ee.taltech.iti0213.dara.game.board.IBoard
 import ee.taltech.iti0213.dara.game.board.IMove
 import ee.taltech.iti0213.dara.game.board.IPosition
 import ee.taltech.iti0213.dara.game.board.IStone
+import java.io.Serializable
 
-interface IStrategy<T: IStone, U: IPosition> {
+interface IStrategy<T: IStone, U: IPosition>: Serializable {
 
     fun onUserClickedLocation(location: U)
     suspend fun getPutMove(board: IBoard<T, U>): U

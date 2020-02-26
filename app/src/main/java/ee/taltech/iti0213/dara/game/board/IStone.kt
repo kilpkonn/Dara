@@ -1,6 +1,8 @@
 package ee.taltech.iti0213.dara.game.board
 
-interface IStone {
+import java.io.Serializable
+
+interface IStone: Serializable {
 
     fun isEmpty(): Boolean
 

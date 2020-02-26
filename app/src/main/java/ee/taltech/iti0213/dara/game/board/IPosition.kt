@@ -1,6 +1,8 @@
 package ee.taltech.iti0213.dara.game.board
 
-interface IPosition {
+import java.io.Serializable
+
+interface IPosition: Serializable {
 
     fun getX(): Int
 
