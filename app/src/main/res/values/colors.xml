@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorLight">#DAA060</color>
     <color name="colorStone">#272727</color>
+    <color name="colorText">#120801</color>
 </resources>
