@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -41,8 +42,8 @@ class GameActivity : AppCompatActivity() {
         gameSession.onSetupOver = Runnable { openDialog("Setup complete!") }
         gameSession.onGameOver = Runnable {
             openDialog("Game over!", Runnable {
-                    startActivity(Intent(this, MenuActivity::class.java))
-                })
+                startActivity(Intent(this, MenuActivity::class.java))
+            })
         }
 
         setupStatistics(gameSession.playerWhite, R.id.player1)
@@ -90,7 +91,6 @@ class GameActivity : AppCompatActivity() {
         val x = idString[idString.lastIndex].toInt() - 'A'.toInt()
         val y = Character.getNumericValue(idString[idString.lastIndex - 1])
         gameSession.onButtonClick(Position(y, x))
-        //findViewById<Button>(id).foreground = resources.getDrawable(R.drawable.stone_triangle, theme)
     }
 
     private fun updateBoard(board: SimpleBoard<Position>) {
@@ -104,11 +104,24 @@ class GameActivity : AppCompatActivity() {
                 val y = Character.getNumericValue(idString[idString.lastIndex - 1])
 
                 when {
-                    board.getBoardMatrix()[y][x].isWhite() -> child.foreground =
-                        resources.getDrawable(R.drawable.stone_triangle, theme)
-                    board.getBoardMatrix()[y][x].isBlack() -> child.foreground =
-                        resources.getDrawable(R.drawable.stone_square, theme)
-                    else -> child.foreground = null
+                    board.getBoardMatrix()[y][x].isWhite() ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            child.foreground = resources.getDrawable(R.drawable.stone_triangle, theme)
+                        } else {
+                            child.background = resources.getDrawable(R.drawable.button_white)
+                        }
+                    board.getBoardMatrix()[y][x].isBlack() ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            child.foreground = resources.getDrawable(R.drawable.stone_square, theme)
+                        } else {
+                            child.background = resources.getDrawable(R.drawable.button_black)
+                        }
+                    else ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            child.foreground = null
+                        } else {
+                            child.background = resources.getDrawable(R.drawable.button_gradient)
+                        }
                 }
             }
         }

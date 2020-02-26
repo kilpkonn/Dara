@@ -5,7 +5,7 @@
     <dimen name="stats_line_margin">0dp</dimen>
     <dimen name="small_margin">8dp</dimen>
     <dimen name="button_margin">4dp</dimen>
-    <dimen name="player_select_size">24sp</dimen>
+    <dimen name="text_headline_size">24sp</dimen>
     <dimen name="title_size">56sp</dimen>
     <dimen name="banner_text_size">32sp</dimen>
     <dimen name="spinner_text_size">22sp</dimen>

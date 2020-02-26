@@ -6,4 +6,6 @@
     <color name="colorLight">#DAA060</color>
     <color name="colorStone">#272727</color>
     <color name="colorText">#120801</color>
+    <color name="colorWhite">#FFE8C6</color>
+    <color name="colorBlack">#0E0701</color>
 </resources>
