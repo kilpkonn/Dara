@@ -4,40 +4,45 @@ import ee.taltech.iti0213.dara.game.board.*
 import kotlinx.coroutines.delay
 
 class HumanStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
-    private var clickedLocation: Position? = null
+    @Transient private var clickedLocation: Position? = null
     override fun onUserClickedLocation(location: Position) {
         clickedLocation = location
     }
 
     override suspend fun getPutMove(board: IBoard<T, Position>): Position {
         clickedLocation = null
-        while (clickedLocation == null) delay(10)
-        return clickedLocation as Position
+        return waitForClickedLocation()
     }
 
     override suspend fun getMove(board: IBoard<T, Position>): IMove<Position> {
         clickedLocation = null
         val matrix = board.getBoardMatrix()
-        while (clickedLocation == null
-            || matrix[clickedLocation!!.getY()][clickedLocation!!.getX()] == Stone.WHITE && !isWhite
-            || matrix[clickedLocation!!.getY()][clickedLocation!!.getX()] == Stone.BLACK && isWhite)
-            delay(10)
+        var fromLocation: Position
+        do {
+            fromLocation = waitForClickedLocation()
+        }
+        while (matrix[fromLocation.getY()][fromLocation.getX()] == Stone.WHITE && !isWhite
+            || matrix[fromLocation.getY()][fromLocation.getX()] == Stone.BLACK && isWhite)
 
-        val fromLocation = clickedLocation
         clickedLocation = null
-        while (clickedLocation == null) delay(10)
+        val location = waitForClickedLocation()
 
-        if (clickedLocation == fromLocation) return getMove(board) // Deselect current
-        return Move(fromLocation as Position, clickedLocation as Position)
+        if (location == fromLocation) return getMove(board) // Deselect current
+        return Move(fromLocation, location)
     }
 
     override suspend fun getTakeMove(board: IBoard<T, Position>): Position {
         clickedLocation = null
-        while (clickedLocation == null) delay(10)
-        return clickedLocation as Position
+        return waitForClickedLocation()
     }
 
     override fun getName(): String {
         return "Human"
+    }
+
+    @Synchronized
+    private suspend fun waitForClickedLocation(): Position {
+        while (clickedLocation == null) delay(10)
+        return clickedLocation as Position
     }
 }
