@@ -14,16 +14,8 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     }
 
     override suspend fun getPutMove(board: IBoard<T, Position>): Position {
-        val matrix = board.getBoardMatrix()
-        val newMatrix: Array<Array<Stone>> =
-            Array(board.getHeight()) { Array(board.getWidth()) { Stone.EMPTY } }
-        for (y in matrix.indices) {
-            for (x in matrix[y].indices) {
-                if (!matrix[y][x].isEmpty())
-                    newMatrix[y][x] = if (matrix[y][x].isWhite()) Stone.WHITE else Stone.BLACK
-            }
-        }
-        return putMiniMax(newMatrix, isWhite, Position(0, 0), 3).value
+        val matrix = convertBoard(board.getBoardMatrix(), board.getHeight(), board.getWidth())
+        return putMiniMax(matrix, isWhite, Position(0, 0), 3).value
     }
 
     override suspend fun getMove(board: IBoard<T, Position>): IMove<Position> {
@@ -46,16 +38,8 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     }
 
     override suspend fun getTakeMove(board: IBoard<T, Position>): Position {
-        val matrix = board.getBoardMatrix()
-        val newMatrix: Array<Array<Stone>> =
-            Array(board.getHeight()) { Array(board.getWidth()) { Stone.EMPTY } }
-        for (y in matrix.indices) {
-            for (x in matrix[y].indices) {
-                if (!matrix[y][x].isEmpty())
-                    newMatrix[y][x] = if (matrix[y][x].isWhite()) Stone.WHITE else Stone.BLACK
-            }
-        }
-        return takeSimple(newMatrix, isWhite)
+        val matrix = convertBoard(board.getBoardMatrix(), board.getHeight(), board.getWidth())
+        return takeSimple(matrix, isWhite)
     }
 
     private fun moveMiniMax(
@@ -141,6 +125,17 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
             }
         }
         return count
+    }
+
+    private fun convertBoard(matrix: Array<Array<T>>, height: Int, width: Int): Array<Array<Stone>> {
+        val newMatrix: Array<Array<Stone>> = Array(height) { Array(width) { Stone.EMPTY } }
+        for (y in matrix.indices) {
+            for (x in matrix[y].indices) {
+                if (!matrix[y][x].isEmpty())
+                    newMatrix[y][x] = if (matrix[y][x].isWhite()) Stone.WHITE else Stone.BLACK
+            }
+        }
+        return newMatrix
     }
 
     override fun getName(): String {
