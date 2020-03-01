@@ -8,6 +8,7 @@ class C {
         const val BOARD_HEIGHT: Int = 6
         const val BOARD_WIDTH: Int = 5
         const val STONES_PER_PLAYER: Int = 12
+        const val ROW_LENGTH: Int = 3
 
         const val GAME_SESSION_KEY: String = "game_session"
 
