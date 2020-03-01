@@ -46,15 +46,16 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     }
 
     override suspend fun getTakeMove(board: IBoard<T, Position>): Position {
-        val possibleMoves: MutableList<Position> = arrayListOf()
         val matrix = board.getBoardMatrix()
-        for (y in 0 until board.getHeight()) {
-            for (x in 0 until board.getWidth()) {
-                if (matrix[y][x].isWhite() && !isWhite || matrix[y][x].isBlack() && isWhite)
-                    possibleMoves.add(Position(y, x))
+        val newMatrix: Array<Array<Stone>> =
+            Array(board.getHeight()) { Array(board.getWidth()) { Stone.EMPTY } }
+        for (y in matrix.indices) {
+            for (x in matrix[y].indices) {
+                if (!matrix[y][x].isEmpty())
+                    newMatrix[y][x] = if (matrix[y][x].isWhite()) Stone.WHITE else Stone.BLACK
             }
         }
-        return possibleMoves.random() // TODO: Weighting
+        return takeSimple(newMatrix, isWhite)
     }
 
     private fun moveMiniMax(
