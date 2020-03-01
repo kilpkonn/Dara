@@ -57,6 +57,31 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         return possibleMoves.random() // TODO: Weighting
     }
 
+    private fun moveMiniMax(
+        matrix: Array<Array<Stone>>,
+        white: Boolean,
+        move: Position,
+        depth: Int
+    ) {
+
+    }
+
+    private fun takeSimple(matrix: Array<Array<Stone>>, white: Boolean): Position {
+        var res: AbstractMap.SimpleEntry<Int, Position>? = null
+        for (y in matrix.indices) {
+            for (x in matrix[y].indices) {
+                if (matrix[y][x].isBlack() && white or matrix[y][x].isWhite() && !white) {
+                    val tmpBoard = matrix.copy()
+                    tmpBoard[y][x] = Stone.EMPTY
+                    val score = countWhite(tmpBoard) - countBlack(tmpBoard)
+                    if (res == null || (score < res.key && white) || (score > res.key && !white))
+                        res = AbstractMap.SimpleEntry(score, Position(y, x))
+                }
+            }
+        }
+        return res!!.value
+    }
+
     private fun putMiniMax(
         matrix: Array<Array<Stone>>,
         white: Boolean,
@@ -65,7 +90,7 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     ): AbstractMap.SimpleEntry<Int, Position> {
         if (depth == 0) {
             val score = countWhite(matrix, 2) - countBlack(matrix, 2)
-            return AbstractMap.SimpleEntry(score * (if (white) 1 else -1), move)
+            return AbstractMap.SimpleEntry(-score, move)
         }
 
         var res: AbstractMap.SimpleEntry<Int, Position>? = null
