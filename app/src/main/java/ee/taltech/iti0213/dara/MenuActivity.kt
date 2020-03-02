@@ -80,8 +80,8 @@ class MenuActivity : AppCompatActivity() {
         player2Spinner.setSelection(player2Strategy)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.run {
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.run {
             putInt(C.PLAYER1_STRATEGY_KEY, player1Strategy)
             putInt(C.PLAYER2_STRATEGY_KEY, player2Strategy)
         }

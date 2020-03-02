@@ -63,8 +63,8 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.run {
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.run {
             putSerializable(C.GAME_SESSION_KEY, gameSession)
         }
         super.onSaveInstanceState(outState)
