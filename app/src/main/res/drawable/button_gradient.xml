@@ -5,7 +5,7 @@
         android:type="radial"
         android:startColor="#F0B977"
         android:endColor="#3A2310"
-        android:gradientRadius="45dp"/>
+        android:gradientRadius="100%"/>
 
     <corners android:radius="@dimen/small_margin"/>
 </shape>
