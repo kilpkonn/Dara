@@ -20,7 +20,11 @@ class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
-/*
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         val player1 = findViewById<View>(R.id.player1)
         val player2 = findViewById<View>(R.id.player2)
 
@@ -62,7 +66,7 @@ class MenuActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
-        }*/
+        }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
