@@ -71,7 +71,6 @@
     <style name="start_button">
         <item name="android:background">@drawable/start_background_gradient</item>
         <item name="android:textSize">@dimen/text_headline_size</item>
-        <item name="android:padding">@dimen/small_margin</item>
     </style>
 
 </resources>
