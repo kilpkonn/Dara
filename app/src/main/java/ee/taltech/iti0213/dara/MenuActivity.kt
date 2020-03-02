@@ -19,8 +19,8 @@ class MenuActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*setContentView(R.layout.activity_menu)
-
+        setContentView(R.layout.activity_menu)
+/*
         val player1 = findViewById<View>(R.id.player1)
         val player2 = findViewById<View>(R.id.player2)
 
