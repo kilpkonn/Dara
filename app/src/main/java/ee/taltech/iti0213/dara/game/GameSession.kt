@@ -9,6 +9,7 @@ import ee.taltech.iti0213.dara.game.constants.C
 import ee.taltech.iti0213.dara.game.player.Player
 import ee.taltech.iti0213.dara.game.player.strategy.HumanStrategy
 import ee.taltech.iti0213.dara.game.player.strategy.IStrategy
+import ee.taltech.iti0213.dara.game.player.strategy.MiniMaxStrategy
 import ee.taltech.iti0213.dara.game.player.strategy.RandomStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -90,6 +91,7 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
     private fun setupPlayer(strategyString: String, isWhite: Boolean): Player<Stone, Position> {
         val strategy: IStrategy<Stone, Position> = when (strategyString) {
             "Simple Randomness" -> RandomStrategy(isWhite)
+            "Minimax AI" -> MiniMaxStrategy(isWhite)
             else -> HumanStrategy(isWhite)
         }
         return Player(strategy)

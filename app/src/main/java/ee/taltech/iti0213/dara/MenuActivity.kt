@@ -13,7 +13,7 @@ import ee.taltech.iti0213.dara.game.constants.C
 
 class MenuActivity : AppCompatActivity() {
 
-    private val strategies = listOf("Simple Randomness", "Human") // TODO: Auto scan classes
+    private val strategies = listOf("Simple Randomness", "Human", "Minimax AI") // TODO: Auto scan classes
     private var player1Strategy: Int = 0
     private var player2Strategy: Int = 0
 
