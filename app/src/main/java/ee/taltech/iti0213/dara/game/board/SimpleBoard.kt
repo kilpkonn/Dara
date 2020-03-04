@@ -22,9 +22,7 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
 
     override fun putStone(to: U): Boolean {
         if (matrix[to.getY()][to.getX()] != Stone.EMPTY) return false
-        if (gotRow(
-                to.getY(),
-                to.getX(),
+        if (gotRow(to.getY(), to.getX(),
                 if (isWhiteToMove) Stone.WHITE else Stone.BLACK
             )
         ) return false

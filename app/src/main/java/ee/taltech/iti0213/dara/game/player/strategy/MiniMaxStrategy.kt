@@ -19,22 +19,8 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     }
 
     override suspend fun getMove(board: IBoard<T, Position>): IMove<Position> {
-        val possibleFromPositions: MutableList<Position> = arrayListOf()
-        val matrix = board.getBoardMatrix()
-        for (y in 0 until board.getHeight()) {
-            for (x in 0 until board.getWidth()) {
-                if (matrix[y][x].isWhite() && isWhite || matrix[y][x].isBlack() && !isWhite)
-                    possibleFromPositions.add(Position(y, x))
-            }
-        }
-        val possibleToPositions: MutableList<Position> = arrayListOf()
-        for (y in 0 until board.getHeight()) {
-            for (x in 0 until board.getWidth()) {
-                if (matrix[y][x].isEmpty())
-                    possibleToPositions.add(Position(y, x))
-            }
-        }
-        return Move(possibleFromPositions.random(), possibleToPositions.random()) // TODO: Minimax
+        val matrix = convertBoard(board.getBoardMatrix(), board.getHeight(), board.getWidth())
+        return moveMiniMax(matrix, isWhite, Move(Position(0, 0), Position(0, 0)), 5).value
     }
 
     override suspend fun getTakeMove(board: IBoard<T, Position>): Position {
@@ -45,10 +31,41 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     private fun moveMiniMax(
         matrix: Array<Array<Stone>>,
         white: Boolean,
-        move: Position,
+        move: Move<Position>,
         depth: Int
-    ) {
+    ): AbstractMap.SimpleEntry<Int, Move<Position>> {
+        if (depth == 0) {
+            val score = countWhite(matrix, 2) - countBlack(matrix, 2)
+            return AbstractMap.SimpleEntry(-score, move)
+        }
 
+        var res: AbstractMap.SimpleEntry<Int, Move<Position>>? = null
+
+        val possibleFromPositions: MutableList<Position> = arrayListOf()
+        for (y in matrix.indices) {
+            for (x in matrix[y].indices) {
+                if (matrix[y][x].isWhite() && white || matrix[y][x].isBlack() && !white)
+                    possibleFromPositions.add(Position(y, x))
+            }
+        }
+        val possibleToPositions: MutableList<Position> = arrayListOf()
+        for (y in matrix.indices) {
+            for (x in matrix[y].indices) {
+                if (matrix[y][x].isEmpty())
+                    possibleToPositions.add(Position(y, x))
+            }
+        }
+        for (from in possibleFromPositions) {
+            for (to in possibleToPositions) {
+                val tmpBoard = matrix.copy()
+                tmpBoard[from.getY()][from.getX()] = Stone.EMPTY
+                tmpBoard[to.getY()][to.getX()] = if (white) Stone.WHITE else Stone.BLACK
+                val tmp = moveMiniMax(tmpBoard, !white, Move(from, to), depth - 1)
+                if (res == null || (tmp.key < res.key && white) || (tmp.key > res.key && !white))
+                    res = tmp
+            }
+        }
+        return res as AbstractMap.SimpleEntry<Int, Move<Position>>
     }
 
     private fun takeSimple(matrix: Array<Array<Stone>>, white: Boolean): Position {
@@ -84,6 +101,8 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
                 if (matrix[y][x].isEmpty()) {
                     val tmpBoard = matrix.copy()
                     tmpBoard[y][x] = if (white) Stone.WHITE else Stone.BLACK
+                    if (countBlack(tmpBoard) > 0 || countWhite(tmpBoard) > 0) continue
+
                     val tmp = putMiniMax(tmpBoard, !white, Position(y, x), depth - 1)
                     if (res == null || (tmp.key < res.key && white) || (tmp.key > res.key && !white))
                         res = tmp
