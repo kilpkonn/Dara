@@ -100,6 +100,9 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
                 if (matrix[y][x].isBlack() && white || matrix[y][x].isWhite() && !white) {
                     val tmpBoard = matrix.copy()
                     tmpBoard[y][x] = Stone.EMPTY
+                    if (countWhite(tmpBoard) - countWhite(matrix) < 0) continue
+                    if (countBlack(tmpBoard) - countBlack(matrix) < 0) continue
+
                     val score = countWhite(tmpBoard) - countBlack(tmpBoard)
                     if (res == null || (score < res.key && white) || (score > res.key && !white))
                         res = AbstractMap.SimpleEntry(score, Position(y, x))

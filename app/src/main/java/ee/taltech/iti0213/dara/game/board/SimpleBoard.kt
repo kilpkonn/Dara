@@ -23,7 +23,8 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
 
     override fun putStone(to: U): Boolean {
         if (matrix[to.getY()][to.getX()] != Stone.EMPTY) return false
-        if (gotRow(to.getY(), to.getX(),
+        if (gotRow(
+                to.getY(), to.getX(),
                 if (isWhiteToMove) Stone.WHITE else Stone.BLACK
             )
         ) return false
@@ -52,8 +53,13 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
         // More than 3 in a row
         val tmpMatrix = matrix.copy()
         tmpMatrix[move.from().getY()][move.from().getX()] = Stone.EMPTY
-        tmpMatrix[move.to().getY()][move.to().getX()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
-        if (countBlack(tmpMatrix, C.ROW_LENGTH + 1) > 0 || countWhite(tmpMatrix, C.ROW_LENGTH + 1) > 0) return -1
+        tmpMatrix[move.to().getY()][move.to().getX()] =
+            if (isWhiteToMove) Stone.WHITE else Stone.BLACK
+        if (countBlack(tmpMatrix, C.ROW_LENGTH + 1) > 0 || countWhite(
+                tmpMatrix,
+                C.ROW_LENGTH + 1
+            ) > 0
+        ) return -1
 
         matrix[move.from().getY()][move.from().getX()] = Stone.EMPTY
         matrix[move.to().getY()][move.to().getX()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
@@ -64,6 +70,13 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
     override fun takeStone(from: U): Boolean {
         if (matrix[from.getY()][from.getX()] == Stone.EMPTY) return false
         if (matrix[from.getY()][from.getX()] == if (!isWhiteToMove) Stone.WHITE else Stone.BLACK) return false
+
+        val tmpMatrix = matrix.copy()
+        tmpMatrix[from.getY()][from.getX()] = Stone.EMPTY
+        if (countWhite(tmpMatrix) - countWhite(matrix) < 0
+            || countBlack(tmpMatrix) - countBlack(matrix) < 0)
+            return false
+
         matrix[from.getY()][from.getX()] = Stone.EMPTY
         evaluateWin()
         return true
