@@ -19,6 +19,7 @@ import java.io.Serializable
 class GameSession(player1Strategy: String, player2Strategy: String) : Serializable {
 
     companion object {
+        val strategies = listOf("Simple Randomness", "Human", "Minimax AI") // TODO: Auto scan
         private val TAG = this::class.java.declaringClass!!.simpleName
     }
 

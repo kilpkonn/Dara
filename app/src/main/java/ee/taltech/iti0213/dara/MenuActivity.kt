@@ -8,12 +8,12 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import ee.taltech.iti0213.dara.game.GameSession
 import ee.taltech.iti0213.dara.game.constants.C
 
 
 class MenuActivity : AppCompatActivity() {
 
-    private val strategies = listOf("Simple Randomness", "Human", "Minimax AI") // TODO: Auto scan classes
     private var player1Strategy: Int = 0
     private var player2Strategy: Int = 0
 
@@ -33,7 +33,7 @@ class MenuActivity : AppCompatActivity() {
         val adapter = ArrayAdapter<String>(
             this,
             R.layout.spinner_item,
-            strategies
+            GameSession.strategies
         )
 
         player1Spinner.adapter = adapter
@@ -93,8 +93,8 @@ class MenuActivity : AppCompatActivity() {
     fun onStartClicked(view: View) {
         val startGameIntent = Intent(this, GameActivity::class.java)
         val bundle = Bundle()
-        bundle.putString(C.PLAYER1_STRATEGY_KEY, strategies[player1Strategy])
-        bundle.putString(C.PLAYER2_STRATEGY_KEY, strategies[player2Strategy])
+        bundle.putString(C.PLAYER1_STRATEGY_KEY, GameSession.strategies[player1Strategy])
+        bundle.putString(C.PLAYER2_STRATEGY_KEY, GameSession.strategies[player2Strategy])
         startGameIntent.putExtras(bundle)
         startActivity(startGameIntent)
     }
