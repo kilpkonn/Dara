@@ -58,8 +58,15 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         for (from in possibleFromPositions) {
             for (to in possibleToPositions) {
                 val tmpBoard = matrix.copy()
+                val streak = if (white) countWhite(tmpBoard) else countBlack(tmpBoard)
                 tmpBoard[from.getY()][from.getX()] = Stone.EMPTY
                 tmpBoard[to.getY()][to.getX()] = if (white) Stone.WHITE else Stone.BLACK
+                val newStreak = streak - (if (white) countWhite(tmpBoard) else countBlack(tmpBoard))
+
+                if (newStreak - streak > 0) {
+                    val takeMove = takeSimple(tmpBoard, white)
+                    tmpBoard[takeMove.getY()][takeMove.getX()] = Stone.EMPTY
+                }
                 val tmp = moveMiniMax(tmpBoard, !white, depth - 1)
                 if (res == null || (tmp.key < res.key && white) || (tmp.key > res.key && !white))
                     res = AbstractMap.SimpleEntry(tmp.key, Move(from, to))
@@ -146,7 +153,11 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         return count
     }
 
-    private fun convertBoard(matrix: Array<Array<T>>, height: Int, width: Int): Array<Array<Stone>> {
+    private fun convertBoard(
+        matrix: Array<Array<T>>,
+        height: Int,
+        width: Int
+    ): Array<Array<Stone>> {
         val newMatrix: Array<Array<Stone>> = Array(height) { Array(width) { Stone.EMPTY } }
         for (y in matrix.indices) {
             for (x in matrix[y].indices) {
