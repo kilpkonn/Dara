@@ -3,6 +3,8 @@ package ee.taltech.iti0213.dara.game.player.strategy
 import ee.taltech.iti0213.dara.game.board.*
 import ee.taltech.iti0213.dara.game.constants.C
 import java.util.AbstractMap
+import kotlin.math.max
+import kotlin.math.min
 
 class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
 
@@ -20,7 +22,7 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
 
     override suspend fun getMove(board: IBoard<T, Position>): IMove<Position> {
         val matrix = convertBoard(board.getBoardMatrix(), board.getHeight(), board.getWidth())
-        return moveMiniMax(matrix, isWhite, 4).value
+        return moveMiniMax(matrix, isWhite, Int.MIN_VALUE, Int.MAX_VALUE, 5).value
     }
 
     override suspend fun getTakeMove(board: IBoard<T, Position>): Position {
@@ -31,6 +33,8 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     private fun moveMiniMax(
         matrix: Array<Array<Stone>>,
         white: Boolean,
+        alpha: Int,
+        beta: Int,
         depth: Int
     ): AbstractMap.SimpleEntry<Int, Move<Position>> {
         if (depth == 0) {
@@ -39,6 +43,8 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         }
 
         var currentBest: AbstractMap.SimpleEntry<Int, Move<Position>>? = null
+        var newAlpha = alpha
+        var newBeta = beta
 
         for (y in matrix.indices) {
             for (x in matrix[y].indices) {
@@ -52,8 +58,16 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
                                 && matrix[y + i][x + j].isEmpty()
                                 && (i == 0 || j == 0)
                             ) {
-                                currentBest =
-                                    testMove(matrix, white, y, x, i, j, depth, currentBest)
+                                currentBest = testMove(matrix, white, y, x, i, j, newAlpha, newBeta, depth, currentBest)
+                                if (white) {
+                                    newAlpha = if (currentBest != null) max(newAlpha, currentBest.key) else newAlpha
+                                    if (beta <= newAlpha)
+                                        break
+                                } else {
+                                    newBeta = if (currentBest != null) min(beta, currentBest.key) else newBeta
+                                    if (newBeta<= alpha)
+                                        break
+                                }
                             }
                         }
                     }
@@ -69,6 +83,8 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         x: Int,
         i: Int,
         j: Int,
+        alpha: Int,
+        beta: Int,
         depth: Int,
         currentBest: AbstractMap.SimpleEntry<Int, Move<Position>>?
     ): AbstractMap.SimpleEntry<Int, Move<Position>>? {
@@ -87,7 +103,7 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
             val takeMove = takeSimple(tmpBoard, white)
             tmpBoard[takeMove.getY()][takeMove.getX()] = Stone.EMPTY
         }
-        val tmp = moveMiniMax(tmpBoard, !white, depth - 1)
+        val tmp = moveMiniMax(tmpBoard, !white, alpha, beta, depth - 1)
         if (currentBest == null || (tmp.key < currentBest.key && white) || (tmp.key > currentBest.key && !white))
             return AbstractMap.SimpleEntry(tmp.key, Move(Position(y, x), Position(y + i, x + j)))
         return currentBest
