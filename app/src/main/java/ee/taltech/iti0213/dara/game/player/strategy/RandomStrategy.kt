@@ -18,22 +18,27 @@ class RandomStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     }
 
     override suspend fun getMove(board: IBoard<T, Position>): IMove<Position> {
-        val possibleFromPositions: MutableList<Position> = arrayListOf()
+        val possibleMoves: MutableList<Move<Position>> = arrayListOf()
         val matrix = board.getBoardMatrix()
-        for (y in 0 until board.getHeight()) {
-            for (x in 0 until board.getWidth()) {
+        for (y in matrix.indices) {
+            for (x in matrix[y].indices) {
                 if (matrix[y][x].isWhite() && isWhite || matrix[y][x].isBlack() && !isWhite)
-                    possibleFromPositions.add(Position(y, x))
+                    for (i in -1..1) {
+                        for (j in -1..1) {
+                            if (y + i >= 0
+                                && x + j >= 0
+                                && y + i < matrix.size
+                                && x + j < matrix[y].size
+                                && matrix[y + i][x + j].isEmpty()
+                                && (i == 0 || j == 0)
+                            ) {
+                                possibleMoves.add(Move(Position(y, x), Position(y + i, x + j)))
+                            }
+                        }
+                    }
             }
         }
-        val possibleToPositions: MutableList<Position> = arrayListOf()
-        for (y in 0 until board.getHeight()) {
-            for (x in 0 until board.getWidth()) {
-                if (matrix[y][x].isEmpty())
-                    possibleToPositions.add(Position(y, x))
-            }
-        }
-        return Move(possibleFromPositions.random(), possibleToPositions.random())
+        return possibleMoves.random()
     }
 
     override suspend fun getTakeMove(board: IBoard<T, Position>): Position {

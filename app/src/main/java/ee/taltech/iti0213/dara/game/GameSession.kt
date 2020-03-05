@@ -13,6 +13,7 @@ import ee.taltech.iti0213.dara.game.player.strategy.MiniMaxStrategy
 import ee.taltech.iti0213.dara.game.player.strategy.RandomStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.Serializable
 
@@ -57,6 +58,7 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
         }
         Log.d(TAG, "All stones have been placed!")
         onSetupOver?.run()
+        delay(1000)
 
         while (board.getGameState() == GameState.PLAYING) {
             Log.d(TAG, "Make move! White to move: $isWhiteToMove")
@@ -85,7 +87,6 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
             if (moveRes >= 0) {
                 isWhiteToMove = !isWhiteToMove
             }
-            //delay(100) // To see something
         }
         onGameOver?.run()
     }
