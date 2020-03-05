@@ -15,12 +15,12 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
 
     override suspend fun getPutMove(board: IBoard<T, Position>): Position {
         val matrix = convertBoard(board.getBoardMatrix(), board.getHeight(), board.getWidth())
-        return putMiniMax(matrix, isWhite, Position(0, 0), 3).value
+        return putMiniMax(matrix, isWhite, Position(-1, -1), 3).value
     }
 
     override suspend fun getMove(board: IBoard<T, Position>): IMove<Position> {
         val matrix = convertBoard(board.getBoardMatrix(), board.getHeight(), board.getWidth())
-        return moveMiniMax(matrix, isWhite, Move(Position(0, 0), Position(0, 0)), 5).value
+        return moveMiniMax(matrix, isWhite, 2).value
     }
 
     override suspend fun getTakeMove(board: IBoard<T, Position>): Position {
@@ -31,12 +31,11 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     private fun moveMiniMax(
         matrix: Array<Array<Stone>>,
         white: Boolean,
-        move: Move<Position>,
         depth: Int
     ): AbstractMap.SimpleEntry<Int, Move<Position>> {
         if (depth == 0) {
-            val score = countWhite(matrix, 2) - countBlack(matrix, 2)
-            return AbstractMap.SimpleEntry(-score, move)
+            val score = countWhite(matrix) - countBlack(matrix)
+            return AbstractMap.SimpleEntry(-score, Move(Position(-1, -1), Position(-1, -1)))
         }
 
         var res: AbstractMap.SimpleEntry<Int, Move<Position>>? = null
@@ -55,14 +54,15 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
                     possibleToPositions.add(Position(y, x))
             }
         }
+
         for (from in possibleFromPositions) {
             for (to in possibleToPositions) {
                 val tmpBoard = matrix.copy()
                 tmpBoard[from.getY()][from.getX()] = Stone.EMPTY
                 tmpBoard[to.getY()][to.getX()] = if (white) Stone.WHITE else Stone.BLACK
-                val tmp = moveMiniMax(tmpBoard, !white, Move(from, to), depth - 1)
+                val tmp = moveMiniMax(tmpBoard, !white, depth - 1)
                 if (res == null || (tmp.key < res.key && white) || (tmp.key > res.key && !white))
-                    res = tmp
+                    res = AbstractMap.SimpleEntry(tmp.key, Move(from, to))
             }
         }
         return res as AbstractMap.SimpleEntry<Int, Move<Position>>
@@ -72,7 +72,7 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         var res: AbstractMap.SimpleEntry<Int, Position>? = null
         for (y in matrix.indices) {
             for (x in matrix[y].indices) {
-                if (matrix[y][x].isBlack() && white or matrix[y][x].isWhite() && !white) {
+                if (matrix[y][x].isBlack() && white || matrix[y][x].isWhite() && !white) {
                     val tmpBoard = matrix.copy()
                     tmpBoard[y][x] = Stone.EMPTY
                     val score = countWhite(tmpBoard) - countBlack(tmpBoard)
@@ -104,21 +104,23 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
                     if (countBlack(tmpBoard) > 0 || countWhite(tmpBoard) > 0) continue
 
                     val tmp = putMiniMax(tmpBoard, !white, Position(y, x), depth - 1)
+                    if (tmp.value.getX() < 0 || tmp.value.getY() < 0) continue
                     if (res == null || (tmp.key < res.key && white) || (tmp.key > res.key && !white))
                         res = tmp
                 }
             }
         }
-        return res as AbstractMap.SimpleEntry<Int, Position>
+        if (res == null) return AbstractMap.SimpleEntry(0, Position(-1, -1))
+        return res
     }
 
     private fun countWhite(matrix: Array<Array<Stone>>, length: Int = C.ROW_LENGTH): Int {
         var count = 0
         for (y in matrix.indices) {
             for (x in matrix[y].indices) {
-                var down = matrix[y][x].isWhite()
-                var right = matrix[y][x].isWhite()
-                for (i in 0..length) {
+                var down = true
+                var right = true
+                for (i in 0 until length) {
                     right = right && (x + i < matrix[y].size && matrix[y][x + i].isWhite())
                     down = down && (y + i < matrix.size && matrix[y + i][x].isWhite())
                 }
@@ -133,9 +135,9 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         var count = 0
         for (y in matrix.indices) {
             for (x in matrix[y].indices) {
-                var down = matrix[y][x].isWhite()
-                var right = matrix[y][x].isWhite()
-                for (i in 0..length) {
+                var down = true
+                var right = true
+                for (i in 0 until length) {
                     right = right && (x + i < matrix[y].size && matrix[y][x + i].isBlack())
                     down = down && (y + i < matrix.size && matrix[y + i][x].isBlack())
                 }
