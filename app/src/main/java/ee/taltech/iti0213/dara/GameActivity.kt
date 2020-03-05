@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 class GameActivity : AppCompatActivity() {
 
     private lateinit var gameSession: GameSession
+    private var dialog: Dialog? = null
     private var handler: Handler = Handler()
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -137,22 +138,27 @@ class GameActivity : AppCompatActivity() {
 
     private fun openDialog(text: String, onClose: Runnable? = null) {
         runOnUiThread {
-            val dialog = Dialog(this)
+            dialog = Dialog(this)
             val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
             var height = (resources.displayMetrics.heightPixels * 0.3).toInt()
             if (height < C.BANNER_MIN_HEIGHT) height = C.BANNER_MIN_HEIGHT
-            dialog.setContentView(R.layout.banner)
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.window?.setLayout(width, height)
-            dialog.findViewById<TextView>(R.id.txt_banner).text = text
-            dialog.setCancelable(true)
-            dialog.show()
+            dialog!!.setContentView(R.layout.banner)
+            dialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog!!.window?.setLayout(width, height)
+            dialog!!.findViewById<TextView>(R.id.txt_banner).text = text
+            dialog!!.setCancelable(true)
+            dialog!!.show()
             handler.postDelayed({
-                dialog.dismiss()
+                dialog?.dismiss()
             }, C.BANNER_LIFE_LENGTH)
-            dialog.setOnDismissListener {
+            dialog?.setOnDismissListener {
                 onClose?.run()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dialog?.dismiss()
     }
 }
