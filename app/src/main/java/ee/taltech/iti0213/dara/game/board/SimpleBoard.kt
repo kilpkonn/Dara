@@ -3,6 +3,7 @@ package ee.taltech.iti0213.dara.game.board
 import ee.taltech.iti0213.dara.game.board.enums.GameState
 import ee.taltech.iti0213.dara.game.constants.C
 import java.io.Serializable
+import kotlin.math.abs
 
 
 class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int) :
@@ -38,6 +39,22 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
     override fun makeMove(move: IMove<U>): Int {
         if (matrix[move.from().getY()][move.from().getX()] != (if (isWhiteToMove) Stone.WHITE else Stone.BLACK)) return -1
         if (matrix[move.to().getY()][move.to().getX()] != Stone.EMPTY) return -1
+
+        // Adjacent cells
+        if (move.from().getY() == move.to().getY()) {
+            if (abs(move.from().getX() - move.to().getX()) > 1) return -1
+        } else if (move.from().getX() == move.to().getX()) {
+            if (abs(move.from().getY() - move.to().getY()) > 1) return -1
+        } else {
+            return -1
+        }
+
+        // More than 3 in a row
+        val tmpMatrix = matrix.copy()
+        tmpMatrix[move.from().getY()][move.from().getX()] = Stone.EMPTY
+        tmpMatrix[move.to().getY()][move.to().getX()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
+        if (countBlack(tmpMatrix, C.ROW_LENGTH + 1) > 0 || countWhite(tmpMatrix, C.ROW_LENGTH + 1) > 0) return -1
+
         matrix[move.from().getY()][move.from().getX()] = Stone.EMPTY
         matrix[move.to().getY()][move.to().getX()] = if (isWhiteToMove) Stone.WHITE else Stone.BLACK
         isWhiteToMove = !isWhiteToMove
@@ -77,6 +94,40 @@ class SimpleBoard<U : IPosition>(private val height: Int, private val width: Int
         }
         gameState =
             if (whiteCount < 3) GameState.BLACK_WON else if (blackCount < 3) GameState.WHITE_WON else gameState
+    }
+
+    private fun countWhite(matrix: Array<Array<Stone>>, length: Int = C.ROW_LENGTH): Int {
+        var count = 0
+        for (y in matrix.indices) {
+            for (x in matrix[y].indices) {
+                var down = true
+                var right = true
+                for (i in 0 until length) {
+                    right = right && (x + i < matrix[y].size && matrix[y][x + i].isWhite())
+                    down = down && (y + i < matrix.size && matrix[y + i][x].isWhite())
+                }
+                if (down) count++
+                if (right) count++
+            }
+        }
+        return count
+    }
+
+    private fun countBlack(matrix: Array<Array<Stone>>, length: Int = C.ROW_LENGTH): Int {
+        var count = 0
+        for (y in matrix.indices) {
+            for (x in matrix[y].indices) {
+                var down = true
+                var right = true
+                for (i in 0 until length) {
+                    right = right && (x + i < matrix[y].size && matrix[y][x + i].isBlack())
+                    down = down && (y + i < matrix.size && matrix[y + i][x].isBlack())
+                }
+                if (down) count++
+                if (right) count++
+            }
+        }
+        return count
     }
 
     private fun gotRow(y: Int, x: Int, stoneToPut: Stone? = null): Boolean {

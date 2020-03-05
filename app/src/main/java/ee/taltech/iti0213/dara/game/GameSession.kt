@@ -64,10 +64,10 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
                     if (isWhiteToMove) playerWhite.getMove(board)
                     else playerBlack.getMove(board)
                 }
-            val moveRes = board.makeMove(move)
+            var moveRes = board.makeMove(move)
             Log.d(TAG, move.toString())
 
-            if (moveRes >= 1) {
+            while (moveRes >= 1) {
                 do {
                     val takeMove =
                         withContext(coroutineScope.coroutineContext + Dispatchers.Default) {
@@ -79,6 +79,7 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
                         Log.d(TAG, "Stone taken from: $takeMove")
                     }
                 } while (!takeRes)
+                moveRes--
             }
             if (moveRes >= 0) {
                 isWhiteToMove = !isWhiteToMove
