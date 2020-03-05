@@ -15,7 +15,7 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
 
     override suspend fun getPutMove(board: IBoard<T, Position>): Position {
         val matrix = convertBoard(board.getBoardMatrix(), board.getHeight(), board.getWidth())
-        return putMiniMax(matrix, isWhite, Position(-1, -1), 3).value
+        return putMiniMax(matrix, isWhite, 3).value
     }
 
     override suspend fun getMove(board: IBoard<T, Position>): IMove<Position> {
@@ -87,12 +87,11 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
     private fun putMiniMax(
         matrix: Array<Array<Stone>>,
         white: Boolean,
-        move: Position,
         depth: Int
     ): AbstractMap.SimpleEntry<Int, Position> {
         if (depth == 0) {
             val score = countWhite(matrix, 2) - countBlack(matrix, 2)
-            return AbstractMap.SimpleEntry(-score, move)
+            return AbstractMap.SimpleEntry(-score, Position(-1, -1))
         }
 
         var res: AbstractMap.SimpleEntry<Int, Position>? = null
@@ -103,10 +102,9 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
                     tmpBoard[y][x] = if (white) Stone.WHITE else Stone.BLACK
                     if (countBlack(tmpBoard) > 0 || countWhite(tmpBoard) > 0) continue
 
-                    val tmp = putMiniMax(tmpBoard, !white, Position(y, x), depth - 1)
-                    if (tmp.value.getX() < 0 || tmp.value.getY() < 0) continue
+                    val tmp = putMiniMax(tmpBoard, !white, depth - 1)
                     if (res == null || (tmp.key < res.key && white) || (tmp.key > res.key && !white))
-                        res = tmp
+                        res = AbstractMap.SimpleEntry(tmp.key, Position(y, x))
                 }
             }
         }
