@@ -20,7 +20,12 @@ import java.io.Serializable
 class GameSession(player1Strategy: String, player2Strategy: String) : Serializable {
 
     companion object {
-        val strategies = listOf("Simple Randomness", "Human", "Minimax AI") // TODO: Auto scan
+        enum class Strategies(val strategyName: String) {
+            SIMPLE_RANDOMNESS("Simple Randomness"),
+            HUMAN("Human"),
+            MINIMAX("Minimax AI")
+        }
+        val strategies = listOf(Strategies.MINIMAX.strategyName, Strategies.SIMPLE_RANDOMNESS.strategyName, Strategies.HUMAN.strategyName)
         private val TAG = this::class.java.declaringClass!!.simpleName
     }
 
@@ -93,8 +98,8 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
 
     private fun setupPlayer(strategyString: String, isWhite: Boolean): Player<Stone, Position> {
         val strategy: IStrategy<Stone, Position> = when (strategyString) {
-            "Simple Randomness" -> RandomStrategy(isWhite)
-            "Minimax AI" -> MiniMaxStrategy(isWhite)
+            Strategies.SIMPLE_RANDOMNESS.strategyName -> RandomStrategy(isWhite)
+            Strategies.MINIMAX.strategyName -> MiniMaxStrategy(isWhite)
             else -> HumanStrategy(isWhite)
         }
         return Player(strategy)
