@@ -38,7 +38,7 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         depth: Int
     ): AbstractMap.SimpleEntry<Int, Move<Position>> {
         if (depth == 0) {
-            val score = countWhite(matrix) - countBlack(matrix)
+            val score = evaluateBoard(matrix)
             return AbstractMap.SimpleEntry(-score, Move(Position(-1, -1), Position(-1, -1)))
         }
 
@@ -134,7 +134,7 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         depth: Int
     ): AbstractMap.SimpleEntry<Int, Position> {
         if (depth == 0) {
-            val score = countWhite(matrix, 2) - countBlack(matrix, 2)
+            val score = evaluateBoard(matrix, 2)
             return AbstractMap.SimpleEntry(-score, Position(-1, -1))
         }
 
@@ -154,6 +154,10 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         }
         if (res == null) return AbstractMap.SimpleEntry(0, Position(-1, -1))
         return res
+    }
+
+    private fun evaluateBoard(matrix: Array<Array<Stone>>, length: Int = C.ROW_LENGTH): Int {
+        return (countWhite(matrix, length) - countBlack(matrix, length)) * 10 - 5 + (0..10).random()
     }
 
     private fun countWhite(matrix: Array<Array<Stone>>, length: Int = C.ROW_LENGTH): Int {
