@@ -20,8 +20,7 @@ class HumanStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         var fromLocation: Position
         do {
             fromLocation = waitForClickedLocation()
-        }
-        while (matrix[fromLocation.getY()][fromLocation.getX()] == Stone.WHITE && !isWhite
+        } while (matrix[fromLocation.getY()][fromLocation.getX()] == Stone.WHITE && !isWhite
             || matrix[fromLocation.getY()][fromLocation.getX()] == Stone.BLACK && isWhite)
 
         clickedLocation = null

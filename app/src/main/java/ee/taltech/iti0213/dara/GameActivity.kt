@@ -19,6 +19,7 @@ import ee.taltech.iti0213.dara.game.board.SimpleBoard
 import ee.taltech.iti0213.dara.game.board.Stone
 import ee.taltech.iti0213.dara.game.constants.C
 import ee.taltech.iti0213.dara.game.player.Player
+import ee.taltech.iti0213.dara.game.player.strategy.HumanStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ class GameActivity : AppCompatActivity() {
     private var dialog: Dialog? = null
     private var handler: Handler = Handler()
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+    private var highlightedButton: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +42,11 @@ class GameActivity : AppCompatActivity() {
 
         gameSession = savedInstanceState?.getSerializable(C.GAME_SESSION_KEY) as GameSession?
             ?: GameSession(player1Strategy, player2Strategy)
-        gameSession.onSetupOver = Runnable { openDialog("Setup complete!") }
+        gameSession.onSetupOver = Runnable {
+            openDialog("Setup complete!")
+            highlightedButton?.background = resources.getDrawable(R.drawable.button_gradient)
+            highlightedButton = null
+        }
         gameSession.onGameOver = Runnable {
             openDialog("Game over!", Runnable {
                 startActivity(Intent(this, MenuActivity::class.java))
@@ -93,6 +99,14 @@ class GameActivity : AppCompatActivity() {
         val x = idString[idString.lastIndex].toInt() - 'A'.toInt()
         val y = Character.getNumericValue(idString[idString.lastIndex - 1])
         gameSession.onButtonClick(Position(y, x))
+
+        highlightedButton?.background = resources.getDrawable(R.drawable.button_gradient)
+        if (view != highlightedButton) {
+            view.background = resources.getDrawable(R.drawable.button_highlight)
+            highlightedButton = view
+        } else {
+            highlightedButton = null
+        }
     }
 
     private fun updateBoard(board: SimpleBoard<Position>) {
