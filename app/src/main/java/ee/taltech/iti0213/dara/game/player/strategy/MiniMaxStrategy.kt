@@ -46,32 +46,30 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         var newAlpha = alpha
         var newBeta = beta
 
-        for (y in matrix.indices) {
-            for (x in matrix[y].indices) {
-                if (matrix[y][x].isWhite() && white || matrix[y][x].isBlack() && !white)
-                    for (i in -1..1) {
-                        for (j in -1..1) {
-                            if (y + i >= 0
-                                && x + j >= 0
-                                && y + i < matrix.size
-                                && x + j < matrix[y].size
-                                && matrix[y + i][x + j].isEmpty()
-                                && (i == 0 || j == 0)
-                            ) {
-                                currentBest = testMove(matrix, white, y, x, i, j, newAlpha, newBeta, depth, currentBest)
-                                if (white) {
-                                    newAlpha = if (currentBest != null) max(newAlpha, currentBest.key) else newAlpha
-                                    if (beta <= newAlpha)
-                                        break
-                                } else {
-                                    newBeta = if (currentBest != null) min(beta, currentBest.key) else newBeta
-                                    if (newBeta<= alpha)
-                                        break
-                                }
-                            }
+        for (y in matrix.indices) for (x in matrix[y].indices) {
+            if (matrix[y][x].isWhite() && white || matrix[y][x].isBlack() && !white)
+                for (i in -1..1) for (j in -1..1) {
+                    if (y + i >= 0
+                        && x + j >= 0
+                        && y + i < matrix.size
+                        && x + j < matrix[y].size
+                        && matrix[y + i][x + j].isEmpty()
+                        && (i == 0 || j == 0)
+                    ) {
+                        currentBest = testMove(matrix, white, y, x, i, j, newAlpha, newBeta, depth, currentBest
+                        )
+                        if (white) {
+                            newAlpha = if (currentBest != null) max(newAlpha, currentBest.key) else newAlpha
+                            if (beta <= newAlpha)
+                                break
+                        } else {
+                            newBeta = if (currentBest != null) min(beta, currentBest.key) else newBeta
+                            if (newBeta <= alpha)
+                                break
                         }
                     }
-            }
+
+                }
         }
         return currentBest as AbstractMap.SimpleEntry<Int, Move<Position>>
     }
@@ -93,8 +91,7 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         tmpBoard[y][x] = Stone.EMPTY
         tmpBoard[y + i][x + j] = if (white) Stone.WHITE else Stone.BLACK
 
-        if (countWhite(tmpBoard, C.ROW_LENGTH + 1) > 0
-            || countBlack(tmpBoard, C.ROW_LENGTH + 1) > 0)
+        if (countWhite(tmpBoard, C.ROW_LENGTH + 1) > 0 || countBlack(tmpBoard, C.ROW_LENGTH + 1) > 0)
             return currentBest
 
         val newStreak = streak - (if (white) countWhite(tmpBoard) else countBlack(tmpBoard))
@@ -134,7 +131,7 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         depth: Int
     ): AbstractMap.SimpleEntry<Int, Position> {
         if (depth == 0) {
-            val score = evaluateBoard(matrix, 2)
+            val score = evaluateBoard(matrix)
             return AbstractMap.SimpleEntry(-score, Position(-1, -1))
         }
 
@@ -156,8 +153,10 @@ class MiniMaxStrategy<T : IStone>(isWhite: Boolean) : BaseStrategy<T>(isWhite) {
         return res
     }
 
-    private fun evaluateBoard(matrix: Array<Array<Stone>>, length: Int = C.ROW_LENGTH): Int {
-        return (countWhite(matrix, length) - countBlack(matrix, length)) * 10 - 5 + (0..10).random()
+    private fun evaluateBoard(matrix: Array<Array<Stone>>): Int {
+        return (countWhite(matrix, C.ROW_LENGTH) - countBlack(matrix, C.ROW_LENGTH)) * 100 +
+                + (countWhite(matrix, C.ROW_LENGTH - 1) - countBlack(matrix, C.ROW_LENGTH - 1)) -
+                - 5 + (0..10).random()
     }
 
     private fun countWhite(matrix: Array<Array<Stone>>, length: Int = C.ROW_LENGTH): Int {
