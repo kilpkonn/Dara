@@ -19,7 +19,6 @@ import ee.taltech.iti0213.dara.game.board.SimpleBoard
 import ee.taltech.iti0213.dara.game.board.Stone
 import ee.taltech.iti0213.dara.game.constants.C
 import ee.taltech.iti0213.dara.game.player.Player
-import ee.taltech.iti0213.dara.game.player.strategy.HumanStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,6 +45,7 @@ class GameActivity : AppCompatActivity() {
             openDialog("Setup complete!")
             highlightedButton?.background = resources.getDrawable(R.drawable.button_gradient)
             highlightedButton = null
+            //Thread.sleep(C.GAME_DELAY_AFTER_SETUP)
         }
         gameSession.onGameOver = Runnable {
             openDialog("Game over!", Runnable {
