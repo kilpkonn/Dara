@@ -21,6 +21,7 @@ import ee.taltech.iti0213.dara.game.constants.C
 import ee.taltech.iti0213.dara.game.player.Player
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 
@@ -174,5 +175,7 @@ class GameActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         dialog?.dismiss()
+        coroutineScope.cancel()
+        gameSession.onDestroy()
     }
 }

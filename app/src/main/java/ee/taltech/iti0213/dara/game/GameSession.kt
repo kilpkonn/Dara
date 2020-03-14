@@ -13,6 +13,7 @@ import ee.taltech.iti0213.dara.game.player.strategy.MiniMaxStrategy
 import ee.taltech.iti0213.dara.game.player.strategy.RandomStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.withContext
 import java.io.Serializable
 
@@ -102,5 +103,9 @@ class GameSession(player1Strategy: String, player2Strategy: String) : Serializab
             else -> HumanStrategy(isWhite)
         }
         return Player(strategy)
+    }
+
+    fun onDestroy() {
+        coroutineScope.cancel()
     }
 }
